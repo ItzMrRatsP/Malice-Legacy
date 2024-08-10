@@ -60,7 +60,7 @@ function CharacterHandler.new(Character, PlayerHandler)
 	self.CameraPart = Assets.Target:Clone()
 	Camera.CameraSubject = self.CameraPart
 
-	self.PosSpring.s = 4
+	self.PosSpring.s = 15
 	self.PosSpring.d = 0.6
 
 	self.WalkSpeed = 1

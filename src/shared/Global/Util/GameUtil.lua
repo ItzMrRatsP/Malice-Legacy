@@ -27,6 +27,26 @@ function GameUtil.weld(b1: BasePart?, b2: BasePart?)
 	weld.Parent = b1
 end
 
+function GameUtil.arrtodictsorted(arr: { any }): { [any]: number }
+	local t = {}
+
+	for index, value in arr do
+		t[value] = index
+	end
+
+	return t
+end
+
+function GameUtil.getIndex(arr: { any })
+	local t = {}
+
+	for index, _ in arr do
+		t[index] = index
+	end
+
+	return t
+end
+
 function GameUtil.getKeys(arr: { [any]: any }): { [number]: any }
 	local keys = {}
 
@@ -45,6 +65,16 @@ function GameUtil.getValues(arr: { [any]: any }): { [number]: any }
 	end
 
 	return values -- {[A] = B} -> {B}
+end
+
+function GameUtil.dicttoarr(arr: { any })
+	local t = {}
+
+	for _, value in arr do
+		table.insert(t, value)
+	end
+
+	return t
 end
 
 function GameUtil.arrtodict(arr: { any })
