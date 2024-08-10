@@ -69,6 +69,11 @@ function CharacterHandler.new(Character, PlayerHandler)
 		"Destroy"
 	)
 
+	self.CombatStateMachine = self.Janitor:Add(
+		Global.StateMachine.newFromFolder(script.CombatStates, self),
+		"Destroy"
+	)
+
 	DisableStates(self.Humanoid, HumanoidDisabledStates)
 
 	RunService.PreRender:Connect(function(DT)
@@ -76,6 +81,7 @@ function CharacterHandler.new(Character, PlayerHandler)
 	end)
 
 	self.MovementStateMachine:Start(self.MovementStateMachine.Idling)
+	self.CombatStateMachine:Start(self.CombatStateMachine.InAction)
 	return self
 end
 

@@ -1,5 +1,17 @@
 local GameUtil = {}
 
+function GameUtil.debounce(callback)
+	return function(...)
+		local db = false
+		db = true
+
+		task.spawn(function(...)
+			callback(...)
+			db = false
+		end, ...)
+	end
+end
+
 function GameUtil.getKeys(arr: { [any]: any }): { [number]: any }
 	local keys = {}
 
