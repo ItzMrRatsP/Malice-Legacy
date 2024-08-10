@@ -10,6 +10,7 @@ Cmdr = "evaera/cmdr@1.12.0"
 Janitor = "howmanysmall/janitor@1.16.0"
 Fusion = "mattschrubb/fusion@1.2.5"
 ProfileService = "surnautica/profileservice@1.0.0"
+Net = "sleitnick/net@0.2.0"
 # by sona's doh
 LemonSignal = "data-oriented-house/lemonsignal@1.10.0"
 TableValue = "data-oriented-house/tablevalue@3.0.0"

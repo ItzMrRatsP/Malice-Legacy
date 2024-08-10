@@ -4,12 +4,13 @@ local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 
 local Packages = ReplicatedStorage:FindFirstChild("Packages")
+local Vendors = ReplicatedStorage:FindFirstChild("Vendors")
 local Assets = ReplicatedStorage:FindFirstChild("Assets")
 
 local Global = require(ReplicatedStorage.Global)
 local Janitor = require(Packages.Janitor)
 local MovementTilt = require(script.MovementTilt)
-local Spring = require(Packages.Spring)
+local Spring = require(Vendors.Spring)
 
 local CharacterHandler = {}
 CharacterHandler.__index = CharacterHandler
