@@ -1,0 +1,12 @@
+{	
+	"NewModule": { // Defines new module.
+		"prefix": "module",
+		"body": [
+            "local $1 = {}\n",
+			"function $1:Init() end\n",
+			"function $1:Start() end\n",
+            "return $1"
+		],
+		"description": "creates new module functionality"
+	},
+}

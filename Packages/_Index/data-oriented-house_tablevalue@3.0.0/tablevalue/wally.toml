@@ -1,0 +1,9 @@
+[package]
+name = "data-oriented-house/tablevalue"
+version = "3.0.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+description = "A tiny proxy that mimics a ValueBase instance for tables. Implemented using the bare minimum to get the job done."
+
+[dependencies]

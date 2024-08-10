@@ -1,0 +1,42 @@
+{
+    "name": "GameJam-Framework",
+    "tree": {
+        "$className": "DataModel",
+        "ReplicatedStorage": {
+            "Packages": {
+                "$path": "Packages"
+            },
+
+            "Vendors": {
+                "$path": "Vendors"
+            },
+
+            "Client": {
+                "$path": "src/client"
+            },
+            
+            "$path": "src/shared",
+            "$ignoreUnknownInstances": true
+        },
+
+        "ServerStorage": {
+            "Server": {
+                "$path": "src/server"
+            }
+        },
+
+        "ServerScriptService": {
+            "ServerLoader": {
+                "$path": "src/home/ServerLoader.server.lua"
+            }
+        },
+
+        "StarterPlayer": {
+            "StarterPlayerScripts": {
+                "ClientLoader": {
+                    "$path": "src/home/ClientLoader.client.lua"
+                }
+            }
+        }
+    }
+}

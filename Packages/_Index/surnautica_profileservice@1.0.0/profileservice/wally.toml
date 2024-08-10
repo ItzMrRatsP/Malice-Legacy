@@ -1,0 +1,12 @@
+[package]
+name = "surnautica/profileservice"
+description = "Forked ProfileService"
+version = "1.0.0"
+license = "MIT OR Apache-2.0"
+authors = [
+	"loleris (https://github.com/LM-loleris)",
+]
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+include = ["src", "src/**", "wally.toml", "wally.lock", "default.project.json"]
+exclude = ["**"]

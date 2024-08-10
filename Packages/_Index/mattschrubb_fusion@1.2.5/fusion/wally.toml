@@ -1,0 +1,9 @@
+[package]
+name = "mattschrubb/fusion"
+description = "Fusion version 0.2.0 fork"
+version = "1.2.5"
+
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
