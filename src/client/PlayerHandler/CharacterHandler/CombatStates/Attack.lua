@@ -6,7 +6,7 @@ local Global = require(ReplicatedStorage.Global)
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local Net = require(ReplicatedStorage.Packages.Net)
 local jan = Janitor.new()
-local Attack = Net:RemoteEvent("AttackRE")
+--local Attack = Net:RemoteEvent("AttackRE")
 
 local function isHumanoid(Part)
 	local HumanoidModel: Model = Part:FindFirstAncestorOfClass("Model")
@@ -97,7 +97,7 @@ return function(StateMachine, Character)
 			print(`Humanoid {HumanoidModel} was detected`)
 		end
 
-		Attack:FireServer(humanoids)
+		--Attack:FireServer(humanoids)
 	end
 
 	function State:Update(dt) end
