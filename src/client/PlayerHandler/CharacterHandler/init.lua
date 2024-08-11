@@ -58,7 +58,7 @@ function CharacterHandler.new(Character, PlayerHandler)
 	self.PosSpring = Spring.new(Vector3.new())
 
 	self.CameraPart = Assets.Target:Clone()
-	Camera.CameraSubject = self.CameraPart
+	Camera.CameraType = Enum.CameraType.Scriptable
 
 	self.PosSpring.s = 15
 	self.PosSpring.d = 0.6
@@ -90,7 +90,7 @@ function CharacterHandler:Update(dt)
 	self.Humanoid.WalkSpeed = self.WalkSpeed
 	local Goal = self.Root.CFrame
 
-	local PositionGoal = Goal.Position
+	local PositionGoal = self.Root.Position + self.Root.CFrame.UpVector * 20
 
 	local CameraPos = self.PosSpring.p
 	self.PosSpring.t = PositionGoal
