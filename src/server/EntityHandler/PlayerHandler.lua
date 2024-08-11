@@ -12,10 +12,13 @@ local EntityStatus = require(script.Parent.EntityStatus)
 
 function PlayerHandler:Start()
 	Net:Connect("AttackRE", function(Player: Player, HumanoidModels: { Model? })
+		local Character = Player.Character
+
+		local RootPart : BasePart = Character:WaitForChild("HumanoidRootPart")
 		-- Humanoi Models:
 		for _, model in HumanoidModels do
 			-- damage entity:
-			DamageHandler.DamageEntity(model, 15, true, 0.25, 0.3)
+			DamageHandler.DamageEntity(model, 15, true, 0.25, 0.3, {RootPart.CFrame.LookVector, 5, 1})
 		end
 	end)
 	

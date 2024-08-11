@@ -3,6 +3,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Global = require(ReplicatedStorage.Global)
 
+
+local Assets = ReplicatedStorage.Assets
+
+local Effects = Assets.Effects
+local Blood : ParticleEmitter = Effects.Blood
+
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local Net = require(ReplicatedStorage.Packages.Net)
 local jan = Janitor.new()
@@ -60,9 +66,7 @@ return function(StateMachine, Character)
 				StateMachine.InAction,
 			},
 			Condition = function(): boolean
-				if Character.MovementStateMachine.CurrentState == "Rolling" then
-					return
-				end
+				if Character.MovementStateMachine.CurrentState == "Rolling" then return end
 				if Button1Down then LastAttack = os.clock() end
 				return Button1Down
 			end,
@@ -81,6 +85,27 @@ return function(StateMachine, Character)
 	end
 
 	function State:Enter()
+
+
+		if AttackNumber > 3 then
+			AttackNumber = 1
+		end
+		Character.CharacterAnimations["1"].Looped = false
+		Character.CharacterAnimations["2"].Looped = false
+		Character.CharacterAnimations["3"].Looped = false
+		Character.CharacterAnimations["4"].Looped = false
+
+		Character.CharacterAnimations["1"].Priority = Enum.AnimationPriority.Action
+		Character.CharacterAnimations["2"].Priority = Enum.AnimationPriority.Action
+		Character.CharacterAnimations["3"].Priority = Enum.AnimationPriority.Action
+		Character.CharacterAnimations["4"].Priority = Enum.AnimationPriority.Action
+
+		Character.CharacterAnimations[tostring(AttackNumber)]:Play(0.1,1,1)
+		
+		AttackNumber += 1
+
+		task.wait(0.25)
+
 		local Params = OverlapParams.new()
 		Params.FilterType = Enum.RaycastFilterType.Exclude
 		Params.FilterDescendantsInstances = { Character.CharacterInstance }
@@ -98,17 +123,9 @@ return function(StateMachine, Character)
 
 			table.insert(humanoids, HumanoidModel)
 			print(`Humanoid {HumanoidModel} was detected`)
+			local BloodClone = jan:Add(Blood:Clone(), "Destroy")
+			BloodClone.Parent = HumanoidModel.HumanoidRootPart
 		end
-
-		if AttackNumber > 4 then AttackNumber = 1 end
-
-		for _, animation in Character.CharacterAnimations do
-			animation.Looped = false
-			animation.Priority = Enum.AnimationPriority.Action
-		end
-
-		Character.CharacterAnimations[tostring(AttackNumber)]:Play(0.1, 1, 1)
-		AttackNumber += 1
 
 		Attack:FireServer(humanoids)
 	end
