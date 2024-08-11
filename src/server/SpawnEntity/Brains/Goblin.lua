@@ -1,12 +1,11 @@
 local Entity = {}
-local Behavior = 
-
-function Entity.path() end
 
 function Entity.run(entity: Model)
-    local obj = {
-        
-    }
+	local objects = {
+		self = entity,
+		damage = 15,
+		radius = 5,
+	}
 end
 
 return Entity

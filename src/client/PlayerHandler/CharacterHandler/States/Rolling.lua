@@ -11,7 +11,7 @@ return function(StateMachine, Character)
 	local janitor = Janitor.new()
 	local State = StateMachine:AddState(script.Name)
 	local LastRoll = os.clock()
-	local Force = 100
+	local Force = 30
 	local Debounce = false
 
 	function State:Start()
@@ -35,7 +35,7 @@ return function(StateMachine, Character)
 				StateMachine.Rolling,
 			},
 			Condition = function(): boolean
-				return os.clock() - LastRoll >= 0.05
+				return os.clock() - LastRoll >= 0.25
 			end,
 		}, true)
 	end

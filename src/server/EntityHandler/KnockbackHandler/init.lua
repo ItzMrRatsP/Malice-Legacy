@@ -1,5 +1,0 @@
-local KnockbackHandler = {}
-
-
-
-return KnockbackHandler

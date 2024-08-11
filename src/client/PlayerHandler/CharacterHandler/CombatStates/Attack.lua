@@ -60,7 +60,9 @@ return function(StateMachine, Character)
 				StateMachine.InAction,
 			},
 			Condition = function(): boolean
-				if Character.MovementStateMachine.CurrentState == "Rolling" then return end
+				if Character.MovementStateMachine.CurrentState == "Rolling" then
+					return
+				end
 				if Button1Down then LastAttack = os.clock() end
 				return Button1Down
 			end,
@@ -98,17 +100,16 @@ return function(StateMachine, Character)
 			print(`Humanoid {HumanoidModel} was detected`)
 		end
 
-		if AttackNumber > 3 then
-			AttackNumber = 1
-		end
-		Character.CharacterAnimations["1"].Looped = false
-		Character.CharacterAnimations["2"].Looped = false
-		Character.CharacterAnimations["3"].Looped = false
-		Character.CharacterAnimations["4"].Looped = false
+		if AttackNumber > 4 then AttackNumber = 1 end
 
-		Character.CharacterAnimations[tostring(AttackNumber)]:Play(0.1,1,1)
-		
+		for _, animation in Character.CharacterAnimations do
+			animation.Looped = false
+			animation.Priority = Enum.AnimationPriority.Action
+		end
+
+		Character.CharacterAnimations[tostring(AttackNumber)]:Play(0.1, 1, 1)
 		AttackNumber += 1
+
 		Attack:FireServer(humanoids)
 	end
 

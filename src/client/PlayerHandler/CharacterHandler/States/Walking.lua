@@ -18,6 +18,8 @@ return function(StateMachine, Character)
 
 	function State:Enter()
 		Character.CharacterAnimations["Walk"]:Play(0.1, 1, 1)
+		Character.CharacterAnimations["Walk"].Priority =
+			Enum.AnimationPriority.Movement
 	end
 
 	function State:Update(dt)
@@ -31,16 +33,22 @@ return function(StateMachine, Character)
 		) * Vector3.new(1, 0, 1)
 
 		local desiredAngle = -math.atan2(-offset.X, -offset.Z)
-
 		if math.abs(desiredAngle) > 2 * math.pi / 4 + 0.1 then
 			desiredAngle = math.sign(desiredAngle)
 				* (math.abs(desiredAngle) - math.pi)
+			Character.CharacterAnimations["Walk"]:AdjustSpeed(
+				Character.WalkSpeed / -10
+			)
 		else
-			-- uhh, what the sigma?
+			Character.CharacterAnimations["Walk"]:AdjustSpeed(
+				Character.WalkSpeed / 10
+			)
 		end
 	end
 
-	function State:Exit() end
+	function State:Exit()
+		Character.CharacterAnimations["Walk"]:Stop(0.2)
+	end
 
 	return State
 end

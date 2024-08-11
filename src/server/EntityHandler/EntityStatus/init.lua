@@ -22,6 +22,12 @@ function EntityStatus.New(Id, IsPlayer)
 
 	local Entity = Entities[Id]
 
+	if not IsPlayer then
+		local Humanoid : Humanoid = Id:FindFirstChildOfClass("Humanoid")
+
+		Humanoid.BreakJointsOnDeath = false
+	end
+
 	Entity.CombatStateMachine:Start(Entity.CombatStateMachine.InAction)
 end
 
