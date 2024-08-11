@@ -90,10 +90,12 @@ function CharacterHandler:Update(dt)
 	self.Humanoid.WalkSpeed = self.WalkSpeed
 	local Goal = self.Root.CFrame
 
-	local PositionGoal = Goal.Position
+	local PositionGoal = self.Root.Position + self.Root.CFrame.UpVector * 30
 
 	local CameraPos = self.PosSpring.p
 	self.PosSpring.t = PositionGoal
+
+	Camera.CFrame = CFrame.new(CameraPos) * CFrame.Angles(math.rad(-90),0,0)
 
 	self.CameraPart.CFrame = CFrame.new(CameraPos)
 	local RootPos, MousePos = self.Root.Position, Mouse.Hit.Position

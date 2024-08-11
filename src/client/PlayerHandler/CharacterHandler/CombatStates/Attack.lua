@@ -6,7 +6,7 @@ local Global = require(ReplicatedStorage.Global)
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local Net = require(ReplicatedStorage.Packages.Net)
 local jan = Janitor.new()
---local Attack = Net:RemoteEvent("AttackRE")
+local Attack = Net:RemoteEvent("AttackRE")
 
 local function isHumanoid(Part)
 	local HumanoidModel: Model = Part:FindFirstAncestorOfClass("Model")
@@ -32,6 +32,7 @@ local function createHitbox(root: BasePart?): BasePart?
 	hb.CanCollide = false
 	hb.CanTouch = false
 	hb.CanQuery = false
+	hb.Massless = true
 	hb.Transparency = 0.6
 	hb.Material = Enum.Material.Neon
 	hb.Size = Vector3.new(7, 5, 7)
@@ -97,7 +98,7 @@ return function(StateMachine, Character)
 			print(`Humanoid {HumanoidModel} was detected`)
 		end
 
-		--Attack:FireServer(humanoids)
+		Attack:FireServer(humanoids)
 	end
 
 	function State:Update(dt) end

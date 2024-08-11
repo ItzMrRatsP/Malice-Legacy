@@ -1,6 +1,6 @@
 --Services
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Global = ReplicatedStorage:WaitForChild("Global")
+local Global = require(ReplicatedStorage.Global)
 --Modules
 
 
