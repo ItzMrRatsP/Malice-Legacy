@@ -17,12 +17,16 @@ return function(StateMachine, Character)
 	end
 
 	function State:Enter()
+		Character.CharacterAnimations["Idle"].Priority = Enum.AnimationPriority.Idle
+		Character.CharacterAnimations["Idle"]:Play()
 		Character.WalkSpeed = 1
 	end
 
 	function State:Update(dt) end
 
-	function State:Exit() end
+	function State:Exit() 
+		Character.CharacterAnimations["Idle"]:Stop()
+	end
 
 	return State
 end

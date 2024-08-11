@@ -17,6 +17,7 @@ return function(StateMachine, Character)
 	end
 
 	function State:Enter()
+		Character.CharacterAnimations["Walk"]:Play(0.1, 1, 1)
 	end
 
 	function State:Update(dt)
