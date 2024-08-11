@@ -9,25 +9,22 @@ local CollectionService = game:GetService("CollectionService")
 print("Working")
 
 local EntityStatus = require(script.EntityStatus)
-local PlayerHandler = require(script.PlayerHandler)
 local NPCHandler = require(script.PlayerHandler)
+local PlayerHandler = require(script.PlayerHandler)
 
-EntityStatus.Players = {}
+EntityHandler.Players = {}
 
 function playerAdded(Player: Player)
-	EntityAdded(Player.UserId)
-
-	EntityStatus.Players[Player.UserId] = {}
+	EntityAdded(Player.UserId, true)
+	EntityHandler.Players[Player.UserId] = {}
 end
 
-function EntityAdded(ID)
-	EntityStatus.New(ID)
+function EntityAdded(ID, IsPlayer: boolean?)
+	EntityStatus.New(ID, IsPlayer or false)
 end
-
 
 local function playerRemoving(Player: Player)
 	EntityStatus.Clear(Player)
-
 end
 
 function EntityHandler:Start()
@@ -41,10 +38,10 @@ function EntityHandler:Start()
 	local Enemies = CollectionService:GetTagged("Enemy")
 
 	for _, Enemy in Enemies do
-		EntityAdded(Enemy)
+		EntityAdded(Enemy, false)
 	end
 
-	CollectionService:GetInstanceAddedSignal("Enemy"):Connect(EntityAdded)
+	CollectionService:GetInstanceAddedSignal("Enemy"):Connect(EntityAdded, false)
 
 	PlayerHandler:Start()
 end

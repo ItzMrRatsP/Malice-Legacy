@@ -33,14 +33,13 @@ local function createHitbox(root: BasePart?): BasePart?
 	hb.CanTouch = false
 	hb.CanQuery = false
 	hb.Massless = true
-	hb.Transparency = 0.6
+	hb.Transparency = 0.99
 	hb.Material = Enum.Material.Neon
 	hb.Size = Vector3.new(7, 5, 7)
 	hb.CFrame = root.CFrame * CFrame.new(0, 0, -5)
 	hb.Parent = workspace
 
 	Global.GameUtil.weld(root, hb) -- Weld
-
 	return hb
 end
 
@@ -81,8 +80,8 @@ return function(StateMachine, Character)
 
 	function State:Enter()
 		local Params = OverlapParams.new()
-		Params.FilterType = Enum.RaycastFilterType.Include
-		Params.FilterDescendantsInstances = { workspace.Enemies }
+		Params.FilterType = Enum.RaycastFilterType.Exclude
+		Params.FilterDescendantsInstances = { Character.CharacterInstance }
 
 		local hb = jan:Add(createHitbox(Character.Root))
 		local Parts = workspace:GetPartsInPart(hb, Params)
@@ -92,6 +91,7 @@ return function(StateMachine, Character)
 			local HumanoidModel = isHumanoid(part)
 			if not HumanoidModel then continue end
 
+			if not HumanoidModel:HasTag("Enemy") then continue end
 			if table.find(humanoids, HumanoidModel) then continue end
 
 			table.insert(humanoids, HumanoidModel)

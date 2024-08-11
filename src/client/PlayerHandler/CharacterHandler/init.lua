@@ -1,5 +1,6 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 
@@ -41,7 +42,7 @@ function CharacterHandler.new(Character, PlayerHandler)
 	self.CharacterInstance = Character
 	self.Humanoid = self.CharacterInstance:WaitForChild("Humanoid")
 	self.Animator = self.Humanoid:WaitForChild("Animator")
-	self.Root = self.Humanoid.RootPart
+	self.Root = self.CharacterInstance:WaitForChild("HumanoidRootPart")
 
 	self.MovementTilt = MovementTilt.Init()
 
@@ -56,9 +57,8 @@ function CharacterHandler.new(Character, PlayerHandler)
 	end
 
 	self.PosSpring = Spring.new(Vector3.new())
-
-	self.CameraPart = Assets.Target:Clone()
 	Camera.CameraType = Enum.CameraType.Scriptable
+	Camera.FieldOfView = 70
 
 	self.PosSpring.s = 15
 	self.PosSpring.d = 0.6
@@ -75,6 +75,10 @@ function CharacterHandler.new(Character, PlayerHandler)
 		"Destroy"
 	)
 
+	UserInputService.InputBegan:Connect(function(Input: InputObject)  
+		if 
+	end)
+
 	DisableStates(self.Humanoid, HumanoidDisabledStates)
 
 	RunService.PreRender:Connect(function(DT)
@@ -88,16 +92,14 @@ end
 
 function CharacterHandler:Update(dt)
 	self.Humanoid.WalkSpeed = self.WalkSpeed
-	local Goal = self.Root.CFrame
 
-	local PositionGoal = self.Root.Position + self.Root.CFrame.UpVector * 20
+	local PositionGoal = self.Root.Position + self.Root.CFrame.UpVector * 25
 
 	local CameraPos = self.PosSpring.p
 	self.PosSpring.t = PositionGoal
 
 	Camera.CFrame = CFrame.new(CameraPos) * CFrame.Angles(math.rad(-90), 0, 0)
 
-	self.CameraPart.CFrame = CFrame.new(CameraPos)
 	local RootPos, MousePos = self.Root.Position, Mouse.Hit.Position
 	self.Root.CFrame = self.Root.CFrame:Lerp(
 		CFrame.new(RootPos, Vector3.new(MousePos.X, RootPos.Y, MousePos.Z)),

@@ -1,21 +1,13 @@
 return function(StateMachine, Character)
 	local State = StateMachine:AddState(script.Name)
 
-	function State:Start()
+	function State:Start() end
 
-	end
+	function State:Enter() end
 
-	function State:Enter()
-        
-	end
+	function State:Update(dt) end
 
-	function State:Update(dt) 
-		
-	end
-
-	function State:Exit()
-		
-	end
+	function State:Exit() end
 
 	return State
 end

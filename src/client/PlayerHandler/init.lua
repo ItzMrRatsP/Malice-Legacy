@@ -18,7 +18,6 @@ end
 
 local function OnCharacterAdded(Character)
 	OnCharacterRemove()
-
 	PlayerHandler.Character = CharacterHandler.new(Character, PlayerHandler)
 end
 

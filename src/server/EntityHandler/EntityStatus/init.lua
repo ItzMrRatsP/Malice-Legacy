@@ -10,12 +10,13 @@ local EntityStatus = {}
 
 EntityStatus.Entities = Entities
 
-function EntityStatus.New(Id)
+function EntityStatus.New(Id, IsPlayer)
 	Entities[Id] = {
 		ReadyToBattle = false,
-		Downed = false,
+		IsPlayer = IsPlayer,
 		CombatStateMachine = Global.StateMachine.newFromFolder(
-			script.CombatStates
+			script.CombatStates,
+			Id
 		),
 	}
 

@@ -1,22 +1,25 @@
+local UserInputService = game:GetService("UserInputService")
+
 return function(StateMachine, Character)
 	local State = StateMachine:AddState(script.Name)
+	local LastRoll = os.clock()
 
 	function State:Start()
+
 		StateMachine:AddEvent({
-			Name = "IdleEvent",
-			ToState = StateMachine.Idling,
+			Name = "RollToIdleEvent",
+			ToState = StateMachine.InAction,
 			FromStates = {
-				StateMachine.Walking,
+				StateMachine.Attack,
 			},
-			Condition = function()
-				if Character.Root.AssemblyLinearVelocity.Magnitude < 0.01 then
-					return true
-				end
+			Condition = function(): boolean
+				return os.clock() - LastRoll >= 0.5
 			end,
 		}, true)
 	end
 
 	function State:Enter()
+		LastRoll = os.clock()
 		Character.WalkSpeed = 1
 	end
 
