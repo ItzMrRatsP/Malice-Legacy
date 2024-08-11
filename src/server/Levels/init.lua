@@ -7,23 +7,23 @@ local LevelGenerator = require(script.LevelGenerator)
 local Levels = {}
 Levels.currentLevel = LevelConfig.Levels.LevelOne
 
-function Levels:Start()
-	local jan = Janitor.new()
+-- function Levels:Start()
+-- 	local jan = Janitor.new()
 
-	jan:Add(function()
-		ReplicatedStorage:SetAttribute("generatingNewLevel", true)
-	end)
+-- 	jan:Add(function()
+-- 		ReplicatedStorage:SetAttribute("generatingNewLevel", true)
+-- 	end)
 
-	LevelConfig.generateLevel:Fire(jan, self.currentLevel)
+-- 	LevelConfig.generateLevel:Fire(jan, self.currentLevel)
 
-	LevelConfig.generateNextLevel:Connect(function()
-		local levels = Global.GameUtil.dicttoarr(LevelConfig.Levels)
-		if not levels[self.currentLevel + 1] then return end
+-- 	LevelConfig.generateNextLevel:Connect(function()
+-- 		local levels = Global.GameUtil.dicttoarr(LevelConfig.Levels)
+-- 		if not levels[self.currentLevel + 1] then return end
 
-		self.currentLevel = levels[self.currentLevel + 1]
+-- 		self.currentLevel = levels[self.currentLevel + 1]
 
-		LevelConfig.generateLevel:Fire(jan, self.currentLevel)
-	end)
-end
+-- 		LevelConfig.generateLevel:Fire(jan, self.currentLevel)
+-- 	end)
+-- end
 
 return Levels

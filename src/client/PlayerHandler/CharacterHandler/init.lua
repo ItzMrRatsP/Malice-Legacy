@@ -95,6 +95,8 @@ function CharacterHandler:Update(dt)
 	local CameraPos = self.PosSpring.p
 	self.PosSpring.t = PositionGoal
 
+	Camera.CFrame = CFrame.new(CameraPos) * CFrame.Angles(math.rad(-90), 0, 0)
+
 	self.CameraPart.CFrame = CFrame.new(CameraPos)
 	local RootPos, MousePos = self.Root.Position, Mouse.Hit.Position
 	self.Root.CFrame = self.Root.CFrame:Lerp(

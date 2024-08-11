@@ -18,6 +18,10 @@ function EntityStatus.New(Id)
 			script.CombatStates
 		),
 	}
+
+	local Entity = Entities[Id]
+
+	Entity.CombatStateMachine:Start(Entity.CombatStateMachine.InAction)
 end
 
 function EntityStatus.Remove(Id)
