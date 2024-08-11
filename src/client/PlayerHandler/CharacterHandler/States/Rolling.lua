@@ -8,13 +8,6 @@ local Janitor = require(ReplicatedStorage.Packages.Janitor)
 -- WE NEED TO REMOVE THE FUCKING VELOCITY!!!!!!
 local Roll = Net:RemoteEvent("RollRE")
 
-local function getForce(char: Model)
-		local params = RaycastParams.new()
-		params.FilterDescendantsInstances = {char}
-		params.FilterType = Enum.Filter
-
-		local frontCast = 
-end
 
 return function(StateMachine, Character)
 	local janitor = Janitor.new()

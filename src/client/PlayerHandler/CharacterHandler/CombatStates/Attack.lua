@@ -45,7 +45,7 @@ end
 
 return function(StateMachine, Character)
 	local State = StateMachine:AddState(script.Name)
-
+	local AttackNumber = 1
 	function State:Start()
 		local Button1Down = false
 		local LastAttack = os.clock()
@@ -98,6 +98,17 @@ return function(StateMachine, Character)
 			print(`Humanoid {HumanoidModel} was detected`)
 		end
 
+		if AttackNumber > 3 then
+			AttackNumber = 1
+		end
+		Character.CharacterAnimations["1"].Looped = false
+		Character.CharacterAnimations["2"].Looped = false
+		Character.CharacterAnimations["3"].Looped = false
+		Character.CharacterAnimations["4"].Looped = false
+
+		Character.CharacterAnimations[tostring(AttackNumber)]:Play(0.1,1,1)
+		
+		AttackNumber += 1
 		Attack:FireServer(humanoids)
 	end
 

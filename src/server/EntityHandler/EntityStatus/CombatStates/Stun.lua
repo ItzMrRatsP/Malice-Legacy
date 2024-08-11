@@ -49,6 +49,7 @@ return function(StateMachine, Id)
 
 		LastStunAnimation += 1
 
+		print("run")
 		RandomStun:Play(0.1, 1)
 	end
 

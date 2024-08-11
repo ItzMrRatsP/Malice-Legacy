@@ -50,7 +50,7 @@ function CharacterHandler.new(Character, PlayerHandler)
 	self.CharacterAnimations = {}
 
 	for _, Animation in
-		ReplicatedStorage.Assets.Animations.CharacterAnimations:GetChildren()
+		ReplicatedStorage.Assets.Animations.CharacterAnimations:GetDescendants()
 	do
 		if not Animation:IsA("Animation") then continue end
 		self.CharacterAnimations[Animation.Name] =
