@@ -9,8 +9,8 @@ currentLevels.generateNextLevel = LemonSignal.new()
 
 currentLevels.Levels = Global.GameUtil.arrtodict { "LevelOne", "LevelTwo" } -- ["LevelOne"] = "LevelOne"
 currentLevels.Maps = {
-	[currentLevels.Levels.LevelOne] = ReplicatedStorage.Assets.Levels.LevelOne,
-	[currentLevels.Levels.LevelTwo] = ReplicatedStorage.Assets.Levels.LevelTwo,
+	[currentLevels.Levels.LevelOne] = workspace.Levels.LevelOne,
+	[currentLevels.Levels.LevelTwo] = workspace.Levels.LevelTwo,
 }
 
 return currentLevels

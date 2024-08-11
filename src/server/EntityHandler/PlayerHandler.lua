@@ -19,8 +19,9 @@ function PlayerHandler:Start()
 		end
 	end)
 	
-	Net:Connect("DodgeRE", function(Player: Player)
-		
+	Net:Connect("RollRE", function(Player: Player)
+		DamageHandler.AddIFrame(Player.UserId, 0.25)
+		print("Rolled")
 	end)
 end
 

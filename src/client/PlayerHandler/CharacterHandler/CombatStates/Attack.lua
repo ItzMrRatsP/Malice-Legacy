@@ -60,8 +60,8 @@ return function(StateMachine, Character)
 				StateMachine.InAction,
 			},
 			Condition = function(): boolean
+				if Character.MovementStateMachine.CurrentState == "Rolling" then return end
 				if Button1Down then LastAttack = os.clock() end
-
 				return Button1Down
 			end,
 		}, true)

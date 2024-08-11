@@ -1,3 +1,6 @@
 {
-    "luau-lsp.sourcemap.rojoProjectFile": "default.project.json"
+    "luau-lsp.sourcemap.rojoProjectFile": "default.project.json",
+    "robloxLsp.diagnostics.globals": [
+        "TweenService"
+    ]
 }

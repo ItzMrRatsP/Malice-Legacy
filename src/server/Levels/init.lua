@@ -10,6 +10,10 @@ Levels.currentLevel = LevelConfig.Levels.LevelOne
 function Levels:Start()
 	local jan = Janitor.new()
 
+	for _, map in LevelConfig.Maps do
+		map.Parent = ReplicatedStorage.Assets.Levels
+	end
+
 	jan:Add(function()
 		ReplicatedStorage:SetAttribute("generatingNewLevel", true)
 	end)

@@ -11,8 +11,7 @@ LevelGenerator.currentMap = nil
 
 local oldLightness = {}
 
-local lightInfo =
-	TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+local lightInfo = TweenInfo.new(3.5, Enum.EasingStyle.Linear)
 
 local function spawnPlayer(CharacterModel: Model)
 	if not CharacterModel then
@@ -27,14 +26,14 @@ local function spawnPlayer(CharacterModel: Model)
 end
 
 local function setLightBrightness(map: Model, brightness: number)
-	for _, lights in map:GetChildren() do
-		if not lights:IsA("SurfaceLight") and not lights:IsA("PointLight") then
+	for _, lights in map:GetDescendants() do
+		if not lights:IsA("PointLight") then
 			continue
 		end
 
-		oldLightness[lights] = lights.Brightness
-		print("LIGHT DETECTED!")
+		-- if lights.Brightness == brightness then continue end
 
+		oldLightness[lights] = lights.Brightness
 		TweenService:Create(lights, lightInfo, { Brightness = brightness })
 			:Play()
 	end

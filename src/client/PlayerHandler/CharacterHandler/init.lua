@@ -12,6 +12,7 @@ local Global = require(ReplicatedStorage.Global)
 local Janitor = require(Packages.Janitor)
 local MovementTilt = require(script.MovementTilt)
 local Spring = require(Vendors.Spring)
+local Net = require(ReplicatedStorage.Packages.Net)
 
 local CharacterHandler = {}
 CharacterHandler.__index = CharacterHandler
@@ -58,10 +59,11 @@ function CharacterHandler.new(Character, PlayerHandler)
 
 	self.PosSpring = Spring.new(Vector3.new())
 	Camera.CameraType = Enum.CameraType.Scriptable
-	Camera.FieldOfView = 70
+	Camera.FieldOfView = 60
 
 	self.PosSpring.s = 15
 	self.PosSpring.d = 0.6
+	self.CanLook = true
 
 	self.WalkSpeed = 1
 
@@ -75,9 +77,6 @@ function CharacterHandler.new(Character, PlayerHandler)
 		"Destroy"
 	)
 
-	UserInputService.InputBegan:Connect(function(Input: InputObject)  
-		if 
-	end)
 
 	DisableStates(self.Humanoid, HumanoidDisabledStates)
 
@@ -100,11 +99,13 @@ function CharacterHandler:Update(dt)
 
 	Camera.CFrame = CFrame.new(CameraPos) * CFrame.Angles(math.rad(-90), 0, 0)
 
-	local RootPos, MousePos = self.Root.Position, Mouse.Hit.Position
-	self.Root.CFrame = self.Root.CFrame:Lerp(
-		CFrame.new(RootPos, Vector3.new(MousePos.X, RootPos.Y, MousePos.Z)),
-		dt * 5 * 3
-	)
+	if self.CanLook then
+		local RootPos, MousePos = self.Root.Position, Mouse.Hit.Position
+		self.Root.CFrame = self.Root.CFrame:Lerp(
+			CFrame.new(RootPos, Vector3.new(MousePos.X, RootPos.Y, MousePos.Z)),
+			dt * 5 * 3
+		)
+	end
 end
 
 function CharacterHandler:Destroy()
