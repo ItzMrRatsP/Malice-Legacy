@@ -1,7 +1,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 local Workspace = game:GetService("Workspace")
 
 local Packages = ReplicatedStorage:FindFirstChild("Packages")
@@ -11,8 +11,8 @@ local Assets = ReplicatedStorage:FindFirstChild("Assets")
 local Global = require(ReplicatedStorage.Global)
 local Janitor = require(Packages.Janitor)
 local MovementTilt = require(script.MovementTilt)
-local Spring = require(Vendors.Spring)
 local Net = require(ReplicatedStorage.Packages.Net)
+local Spring = require(Vendors.Spring)
 
 local CharacterHandler = {}
 CharacterHandler.__index = CharacterHandler
@@ -76,7 +76,6 @@ function CharacterHandler.new(Character, PlayerHandler)
 		Global.StateMachine.newFromFolder(script.CombatStates, self),
 		"Destroy"
 	)
-
 
 	DisableStates(self.Humanoid, HumanoidDisabledStates)
 

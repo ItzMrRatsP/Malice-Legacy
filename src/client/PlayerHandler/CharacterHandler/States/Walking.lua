@@ -1,15 +1,17 @@
 return function(StateMachine, Character)
 	local State = StateMachine:AddState(script.Name)
 
-	function State:Start() 
-        StateMachine:AddEvent({
+	function State:Start()
+		StateMachine:AddEvent({
 			Name = "WalkEvent",
 			ToState = StateMachine.Walking,
 			FromStates = {
-				StateMachine.Idling
+				StateMachine.Idling,
 			},
 			Condition = function()
-				if Character.Root.AssemblyLinearVelocity.Magnitude > 0.2 then return true end
+				if Character.Root.AssemblyLinearVelocity.Magnitude > 0.2 then
+					return true
+				end
 			end,
 		}, true)
 	end
@@ -17,20 +19,27 @@ return function(StateMachine, Character)
 	function State:Enter()
 	end
 
-	function State:Update(dt) 
-        Character.WalkSpeed += (16 - Character.WalkSpeed) * (1 - math.pow(5, -1.1 * dt))
+	function State:Update(dt)
+		Character.WalkSpeed += (16 - Character.WalkSpeed) * (1 - math.pow(
+			5,
+			-1.1 * dt
+		))
 
-		local offset = Character.Root.CFrame.Rotation:PointToObjectSpace(Character.Humanoid.MoveDirection) * Vector3.new(1,0,1)
+		local offset = Character.Root.CFrame.Rotation:PointToObjectSpace(
+			Character.Humanoid.MoveDirection
+		) * Vector3.new(1, 0, 1)
 
 		local desiredAngle = -math.atan2(-offset.X, -offset.Z)
-		if math.abs(desiredAngle) > 2*math.pi/4 + 0.1 then
-			desiredAngle = math.sign(desiredAngle) * (math.abs(desiredAngle) - math.pi)
+
+		if math.abs(desiredAngle) > 2 * math.pi / 4 + 0.1 then
+			desiredAngle = math.sign(desiredAngle)
+				* (math.abs(desiredAngle) - math.pi)
 		else
+			-- uhh, what the sigma?
 		end
 	end
 
-	function State:Exit()
-	end
+	function State:Exit() end
 
 	return State
 end

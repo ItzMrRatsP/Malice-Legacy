@@ -1,26 +1,17 @@
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 
-local Net = require(ReplicatedStorage.Packages.Net)
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
+local Net = require(ReplicatedStorage.Packages.Net)
 
 -- WE NEED TO REMOVE THE FUCKING VELOCITY!!!!!!
 local Roll = Net:RemoteEvent("RollRE")
-
-local function getForce(char: Model)
-		local params = RaycastParams.new()
-		params.FilterDescendantsInstances = {char}
-		params.FilterType = Enum.Filter
-
-		local frontCast = 
-end
 
 return function(StateMachine, Character)
 	local janitor = Janitor.new()
 	local State = StateMachine:AddState(script.Name)
 	local LastRoll = os.clock()
-	local Force = 30
+	local Force = 100
 	local Debounce = false
 
 	function State:Start()
@@ -32,7 +23,8 @@ return function(StateMachine, Character)
 				StateMachine.Walking,
 			},
 			Condition = function(): boolean
-				return UserInputService:IsKeyDown(Enum.KeyCode.Space) and not Debounce
+				return UserInputService:IsKeyDown(Enum.KeyCode.Space)
+					and not Debounce
 			end,
 		}, true)
 
@@ -43,7 +35,7 @@ return function(StateMachine, Character)
 				StateMachine.Rolling,
 			},
 			Condition = function(): boolean
-				return os.clock() - LastRoll >= 0.25
+				return os.clock() - LastRoll >= 0.05
 			end,
 		}, true)
 	end
@@ -56,7 +48,7 @@ return function(StateMachine, Character)
 		Character.MovementTilt:Disable()
 		Character.CanLook = false
 		Character.WalkSpeed = 0
-		
+
 		local BodyVelocity = janitor:Add(Instance.new("BodyVelocity"))
 		BodyVelocity.Velocity = Character.Root.CFrame.LookVector * Force
 		BodyVelocity.MaxForce = Vector3.one * math.huge
@@ -65,7 +57,7 @@ return function(StateMachine, Character)
 
 	function State:Update(dt) end
 
-	function State:Exit() 
+	function State:Exit()
 		Character.CanLook = true
 		Character.MovementTilt:Enable()
 

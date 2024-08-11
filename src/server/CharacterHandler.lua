@@ -26,9 +26,12 @@ function CharacterHandler:Start()
 
 			jan:Add(Character)
 
-			-- Anchor
-			local Humanoid = Character:FindFirstChild("Humanoid")
+			for _, bodyPart in Character:GetChildren() do
+				if not bodyPart:IsA("BasePart") then continue end
+				bodyPart.CollisionGroup = "Player"
+			end
 
+			local Humanoid = Character:FindFirstChild("Humanoid")
 			jan:Add(Humanoid.Died:Connect(function()
 				-- Died
 				-- local arr = Global.GameUtil.dicttoarr(LevelConfig.Levels)
