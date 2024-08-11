@@ -9,9 +9,6 @@ local Entities = {
 	
 }
 
---Remotes
-local UpdateHealth = ReplicatedStorage.RemoteEvents.UpdateHealth
-
 local EntityStatus = {}
 
 EntityStatus.Entities = Entities
