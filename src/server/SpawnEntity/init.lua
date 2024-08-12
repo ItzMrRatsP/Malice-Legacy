@@ -48,8 +48,7 @@ local function createNPC(spawn: BasePart, name: string)
 		humanoid.Died:Connect(function()
 			task.wait(2)
 			table.remove(spawnedEntity, table.find(spawnedEntity, janitor))
-			if not janitor then return end
-			janitor:Destroy()
+			if janitor.Destroy then janitor:Destroy() end
 		end),
 
 		"Disconnect"
@@ -68,7 +67,7 @@ function spawnEntity:Start()
 
 	self.despawnLevelEntity:Connect(function()
 		for _, janitor in spawnedEntity do
-			janitor:Destroy()
+			if janitor.Destroy then janitor:Destroy() end
 		end
 	end)
 end

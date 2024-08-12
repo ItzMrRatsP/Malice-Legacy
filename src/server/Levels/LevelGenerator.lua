@@ -1,8 +1,10 @@
+local ContentProvider = game:GetService("ContentProvider")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 local TweenService = game:GetService("TweenService")
 
+local GameTimer = require(ServerStorage.Server.GameTimer)
 local Global = require(ReplicatedStorage.Global)
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local LevelConfig = require(script.Parent.LevelConfig)
@@ -47,14 +49,14 @@ local function revertBrightness()
 	end
 end
 
-local function onNextLevelTouched(part, main)
+local function onNextLevelTouched(part, jan)
 	local model = part:FindFirstAncestorOfClass("Model")
 	if not model then return end
 
 	local humanoid = model:FindFirstChildOfClass("Humanoid")
 	if not humanoid then return end
 
-	main:Destroy()
+	jan:Cleanup()
 	LevelConfig.generateNextLevel:Fire()
 end
 
@@ -69,7 +71,7 @@ LevelConfig.generateLevel:Connect(function(jan: Janitor.Janitor, level: string)
 
 	LevelGenerator.currentMap = jan:Add(LevelConfig.Maps[level]:Clone())
 	LevelGenerator.currentMap.Parent = workspace.Levels
-	LevelGenerator.currentMap:PivotTo(workspace.SpawnLevel:GetPivot())
+	LevelGenerator.currentMap:PivotTo(CFrame.new(workspace.SpawnLevel.Position))
 
 	setLightBrightness(LevelGenerator.currentMap, 0)
 
@@ -82,13 +84,19 @@ LevelConfig.generateLevel:Connect(function(jan: Janitor.Janitor, level: string)
 		ReplicatedStorage:SetAttribute("generatingNewLevel", false)
 		revertBrightness()
 
-		local nextLevel = LevelGenerator.currentMap:FindFirstChild("NextLevel")
+		if not LevelGenerator.currentMap:GetAttribute("NoTimer") then
+			GameTimer.StartTimer:Fire()
+		else
+			GameTimer.RemoveTimer:Fire()
+		end
 
+		local nextLevel = LevelGenerator.currentMap:FindFirstChild("NextLevel")
 		if not nextLevel then return end
 
-		nextLevel.Touched:Connect(function(hit)
-			onNextLevelTouched(hit, nextLevel)
-		end)
+		jan:Add(nextLevel)
+		jan:Add(nextLevel.Touched:Connect(function(hit)
+			onNextLevelTouched(hit, jan)
+		end))
 	end)
 end)
 

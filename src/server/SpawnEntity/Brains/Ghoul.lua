@@ -8,7 +8,7 @@ local BehaviorTree = require(ReplicatedStorage.Vendors.BehaviorTreeCreator)
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local SimplePath = require(ReplicatedStorage.Vendors.SimplePath)
 
-local Goblin = {}
+local Ghoul = {}
 
 local function setPath(self, Path)
 	Path.Reached:Connect(function()
@@ -25,7 +25,7 @@ local function setPath(self, Path)
 	end)
 end
 
-function Goblin:Start(Entity: Model)
+function Ghoul:Start(Entity: Model)
 	local delayPerAttack = 2
 
 	local obj = {
@@ -71,16 +71,12 @@ function Goblin:Start(Entity: Model)
 	local Humanoid = obj.Entity:FindFirstChild("Humanoid")
 
 	janitor:Add(Humanoid.Died:Connect(function()
-		return janitor:Cleanup()
+		janitor:Cleanup()
 	end))
 
 	janitor:Add(obj.Entity.Destroying:Connect(function()
-		return janitor:Cleanup()
+		janitor:Cleanup()
 	end))
-
-	Goblin.Stop = function() -- Stops prototype ai.
-		return janitor:Cleanup()
-	end
 end
 
-return Goblin
+return Ghoul

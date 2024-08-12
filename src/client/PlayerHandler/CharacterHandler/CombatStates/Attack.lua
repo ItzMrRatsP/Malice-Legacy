@@ -65,7 +65,7 @@ return function(StateMachine, Character)
 				StateMachine.InAction,
 			},
 			Condition = function(): boolean
-				if Character.MovementStateMachine.CurrentState == "Rolling" then
+				if Character.MovementStateMachine.CurrentState.Name == "Rolling" then
 					return false
 				end
 				if Button1Down then LastAttack = os.clock() end
@@ -102,10 +102,30 @@ return function(StateMachine, Character)
 		Character.CharacterAnimations["4"].Priority =
 			Enum.AnimationPriority.Action
 
-		Character.CharacterAnimations[tostring(AttackNumber)]:Play(0.1, 1, 1)
-		Global.GameUtil.playSound(`Swoosh{AttackNumber}`, Character.Root)
+		local Params = OverlapParams.new()
+		Params.FilterType = Enum.RaycastFilterType.Exclude
+		Params.FilterDescendantsInstances = { Character.CharacterInstance }
 
-		AttackNumber += 1
+		local hb = jan:Add(createHitbox(Character.Root))
+		local Parts = workspace:GetPartsInPart(hb, Params)
+
+		local DoorOpen = false
+
+		for _, part: BasePart in Parts do
+			if part:HasTag("Door") and part.Anchored then
+				DoorOpen = true
+			end
+		end
+
+		if not DoorOpen then
+			Character.CharacterAnimations[tostring(AttackNumber)]:Play(0.1, 1, 1)
+			Global.GameUtil.playSound(`Swoosh{AttackNumber}`, Character.Root)
+
+			AttackNumber += 1
+		else		
+			Character.CharacterAnimations["Kick"].Looped = false
+			Character.CharacterAnimations["Kick"]:Play(0.1, 1, 1)
+		end
 
 		if AttackNumber <= 2 then
 			task.wait(0.25)
@@ -123,11 +143,15 @@ return function(StateMachine, Character)
 		local hb = jan:Add(createHitbox(Character.Root))
 		local Parts = workspace:GetPartsInPart(hb, Params)
 		local humanoids = {}
+		local Breakables = {}
 
 		for _, part: BasePart in Parts do
+			if part:HasTag("Breakable") then
+				table.insert(Breakables, part)
+				continue
+			end
 			local HumanoidModel = isHumanoid(part)
 			if not HumanoidModel then continue end
-
 			if not HumanoidModel:HasTag("Enemy") then continue end
 			if table.find(humanoids, HumanoidModel) then continue end
 
@@ -140,7 +164,7 @@ return function(StateMachine, Character)
 			BloodClone:Emit(50)
 		end
 
-		Attack:FireServer(humanoids)
+		Attack:FireServer(humanoids, Breakables)
 
 		task.delay(
 			Character.CharacterAnimations[tostring(AttackNumber)].Length - 0.25,

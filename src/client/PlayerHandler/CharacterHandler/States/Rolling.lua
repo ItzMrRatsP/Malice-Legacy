@@ -23,6 +23,9 @@ return function(StateMachine, Character)
 				StateMachine.Walking,
 			},
 			Condition = function(): boolean
+				if Character.CombatStateMachine.CurrentState.Name == "Attack" then
+					return false
+				end
 				return UserInputService:IsKeyDown(Enum.KeyCode.Space)
 					and not Debounce
 			end,

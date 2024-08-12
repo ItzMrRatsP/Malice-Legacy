@@ -50,7 +50,6 @@ return function(StateMachine, Id)
 			Animator:LoadAnimation(EnemyAnimations[LastStunAnimation])
 
 		LastStunAnimation += 1
-
 		RandomStun:Play(0.1, 1)
 	end
 

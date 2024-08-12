@@ -1,5 +1,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RNG = Random.new()
+
 local DebugUtil = require(script.Parent.DebugUtil)
+local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local Promise = require(ReplicatedStorage.Packages.Promise)
 local GameUtil = {}
 
@@ -13,6 +16,14 @@ function GameUtil.debounce(callback)
 			db = false
 		end, ...)
 	end
+end
+
+function GameUtil:getRandom(tab: { [number]: any }): { any }?
+	if self.countDict(tab) <= 0 then return end
+	if self.countDict(tab) == 1 then return tab[1] end
+
+	local randomIndex = RNG:NextInteger(1, self.countDict(tab))
+	return tab[randomIndex]
 end
 
 function GameUtil.weld(b1: BasePart?, b2: BasePart?)
@@ -89,17 +100,20 @@ function GameUtil.arrtodict(arr: { any })
 	return dict
 end
 
-function GameUtil.playSound(name: string, attachTo)
+function GameUtil.playSound(name: string, attachTo, janitor: Janitor.Janitor?)
 	local Sound = ReplicatedStorage.Assets.Sounds:FindFirstChild(name, true)
 	if not Sound then return end
 
 	local clonedSound = Sound:Clone()
+	if janitor and janitor.Add then janitor:Add(clonedSound) end
 	clonedSound.Parent = attachTo
 
 	clonedSound:Play()
 
 	Promise.fromEvent(clonedSound.Stopped, function()
+		if not clonedSound then return true end
 		clonedSound:Destroy()
+
 		return true
 	end)
 end
@@ -113,6 +127,16 @@ function GameUtil.search<T>(array, predict: (T) -> boolean)
 	end
 
 	return final
+end
+
+function GameUtil.countDict(dict)
+	local num = 0
+
+	for _, _ in dict do
+		num += 1
+	end
+
+	return num
 end
 
 function GameUtil.getbiggestValue<T>(

@@ -7,11 +7,18 @@ local currentLevels = {}
 currentLevels.generateLevel = LemonSignal.new()
 currentLevels.generateNextLevel = LemonSignal.new()
 
-currentLevels.Levels = Global.GameUtil.arrtodict { "LevelOne", "LevelTwo" } -- ["LevelOne"] = "LevelOne"
+currentLevels.Levels = Global.GameUtil.arrtodict {
+	"LevelOne",
+	"LevelTwo",
+	"LevelThree",
+	"LevelFour",
+}
+
 currentLevels.Maps = {
 	[currentLevels.Levels.LevelOne] = workspace.Levels.LevelOne,
 	[currentLevels.Levels.LevelTwo] = workspace.Levels.LevelTwo,
-	-- [currentLevels.Levels.LevelThree] = workspace.Levels.LevelThree,
+	[currentLevels.Levels.LevelThree] = workspace.Levels.LevelThree,
+	[currentLevels.Levels.LevelFour] = workspace.Levels.LevelFour,
 }
 
 return currentLevels
