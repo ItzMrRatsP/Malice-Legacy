@@ -52,7 +52,7 @@ function loadingSequel:Start()
 
 			local TweenIn = TweenService:Create(
 				LoadingUI.Background,
-				OutInfo,
+				InInfo,
 				{ GroupTransparency = 0 }
 			)
 
