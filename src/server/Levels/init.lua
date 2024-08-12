@@ -3,6 +3,7 @@ local Global = require(ReplicatedStorage.Global)
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local LevelConfig = require(script.LevelConfig)
 local LevelGenerator = require(script.LevelGenerator)
+local ShopKeeperHandler = require(script.ShopKeeperHandler)
 
 local Levels = {}
 Levels.currentLevel = LevelConfig.Levels.LevelOne
@@ -26,6 +27,7 @@ function Levels:Start()
 
 		self.currentLevel = levels[self.currentLevel + 1]
 		LevelConfig.generateLevel:Fire(jan, self.currentLevel)
+		ShopKeeperHandler.Entered(self.currentLevel)
 	end)
 end
 
