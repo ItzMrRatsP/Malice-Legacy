@@ -4,7 +4,7 @@ local Global = require(ReplicatedStorage.Global)
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
 
 local spawnEntity = {}
-local spawnTag = "NPCSpawn" -- Tag for all spawn points!
+local spawnTag = "SpawnEntity" -- Tag for all spawn points!
 
 local function createNPC(spawn: BasePart, name: string)
 	local janitor = Janitor.new()
@@ -20,7 +20,7 @@ local function createNPC(spawn: BasePart, name: string)
 
 	local npc = janitor:Add(targetEntity:Clone(), "Destroy")
 	npc:PivotTo(spawn.CFrame)
-	npc.Parent = workspace.Entity
+	npc.Parent = workspace.Enemies
 
 	-- Spawn title:
 	local humanoid = npc:FindFirstChild("Humanoid")
@@ -42,12 +42,13 @@ local function createNPC(spawn: BasePart, name: string)
 end
 
 function spawnEntity:Start()
-	for _, spawns in CollectionService:GetTagged(spawnTag) do
+	CollectionService:GetInstanceAddedSignal(spawnTag):Connect(function(spawns)
+		print("ADDED NEW SPAWN!")
 		local entityName = spawns:GetAttribute("Name")
-		if not entityName then continue end
+		if not entityName then return end
 
 		createNPC(spawns, entityName)
-	end
+	end)
 end
 
 return spawnEntity
