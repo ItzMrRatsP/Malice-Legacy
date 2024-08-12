@@ -12,16 +12,16 @@ local Goblin = {}
 
 local function setPath(self, Path)
 	Path.Reached:Connect(function()
-		self.HasTarget = false
+		self.hasTarget = false
 		self.Target = nil
 	end)
 
 	Path.Blocked:Connect(function()
-		if self.HasTarget then Path:Run(self.Target) end
+		if self.hasTarget then Path:Run(self.Target.PrimaryPart) end
 	end)
 
 	Path.WaypointReached:Connect(function()
-		if self.HasTarget then Path:Run(self.Target) end
+		if self.hasTarget then Path:Run(self.Target.PrimaryPart) end
 	end)
 end
 
@@ -71,6 +71,10 @@ function Goblin:Start(Entity: Model)
 	local Humanoid = obj.Entity:FindFirstChild("Humanoid")
 
 	janitor:Add(Humanoid.Died:Connect(function()
+		return janitor:Cleanup()
+	end))
+
+	janitor:Add(obj.Entity.Destroying:Connect(function()
 		return janitor:Cleanup()
 	end))
 

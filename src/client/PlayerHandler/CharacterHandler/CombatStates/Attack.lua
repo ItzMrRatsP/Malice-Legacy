@@ -103,6 +103,7 @@ return function(StateMachine, Character)
 			Enum.AnimationPriority.Action
 
 		Character.CharacterAnimations[tostring(AttackNumber)]:Play(0.1, 1, 1)
+		Global.GameUtil.playSound(`Swoosh{AttackNumber}`, Character.Root)
 
 		AttackNumber += 1
 
@@ -131,9 +132,12 @@ return function(StateMachine, Character)
 			if table.find(humanoids, HumanoidModel) then continue end
 
 			table.insert(humanoids, HumanoidModel)
-			print(`Humanoid {HumanoidModel} was detected`)
+
+			Global.GameUtil.playSound("SwordImpact", HumanoidModel)
+
 			local BloodClone = jan:Add(Blood:Clone(), "Destroy")
 			BloodClone.Parent = HumanoidModel.HumanoidRootPart
+			BloodClone:Emit(50)
 		end
 
 		Attack:FireServer(humanoids)

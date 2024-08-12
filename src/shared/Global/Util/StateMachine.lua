@@ -143,7 +143,6 @@ function StateMachine:Transition(nextState)
 	end
 	self.CurrentState:Enter()
 	self.Transitioning = false
-	print(self.CurrentState.Name)
 end
 
 function StateMachine:AddEvent(eventTable, startEnabled)

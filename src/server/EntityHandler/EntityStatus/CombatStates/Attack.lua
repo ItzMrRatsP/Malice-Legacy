@@ -1,7 +1,8 @@
-return function(StateMachine, Character)
+return function(StateMachine, Id)
 	local State = StateMachine:AddState(script.Name)
 
-	function State:Start() end
+	function State:Start()
+	end
 
 	function State:Enter() end
 

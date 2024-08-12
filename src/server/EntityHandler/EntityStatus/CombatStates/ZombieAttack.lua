@@ -3,33 +3,28 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Global = require(ReplicatedStorage.Global)
 
 local Assets = ReplicatedStorage.Assets
-local EnemyAnimations = Assets.Animations.EnemyAnimations.Stuns:GetChildren()
+local EnemyAnimations = Assets.Animations.EnemyAnimations.M1:GetChildren()
 
-local RNG = Random.new()
 
 return function(StateMachine, Id)
 	local State = StateMachine:AddState(script.Name)
-	local LastStunAnimation = 1
-	local defaultWalkSpeed = 0
+	local defaultWalkSpeed 
 
-	function State:Start() end
+	function State:Start()
+
+
+
+	end
 
 	function State:Enter()
-		-- Enter Stun State
-
+		print("Attacked")
 		local model = Id
 
-		if typeof(model) == "number" then
-			model = Players:GetPlayerByUserId(model).Character
-		end
-
+		if typeof(Id) == "number" then return end
 		if not model:IsA("Model") then return end
 
 		local Humanoid = model:FindFirstChildOfClass("Humanoid")
 		if not Humanoid then
-			Global.DebugUtil(
-				`No humanoid exist in the given entity model {Id.Name}`
-			)
 			return
 		end
 
@@ -38,31 +33,27 @@ return function(StateMachine, Id)
 
 		local Animator = Humanoid:FindFirstChildOfClass("Animator")
 		if not Animator then
-			Global.DebugUtil(
-				`No animator exist in the given entity humanoid {Id.Name}`
-			)
 			return
 		end
 
-		if LastStunAnimation > #EnemyAnimations then LastStunAnimation = 1 end
 
-		local RandomStun =
-			Animator:LoadAnimation(EnemyAnimations[LastStunAnimation])
+        local ZombieAttackNumber = math.random(1,2) -- SUE ME
 
-		LastStunAnimation += 1
+        local Track = Animator:LoadAnimation(EnemyAnimations[ZombieAttackNumber])
+		Track.Looped = false
 
-		RandomStun:Play(0.1, 1)
+		Track:Play()
 	end
 
-	function State:Update(dt) end
+	function State:Update(dt) 
+		
+	end
 
 	function State:Exit()
 		local model = Id
 
-		if typeof(model) == "number" then
-			model = Players:GetPlayerByUserId(model).Character
-		end
-
+		if typeof(Id) == "number" then return end
+		
 		if not model:IsA("Model") then return end
 
 		local Humanoid = model:FindFirstChildOfClass("Humanoid")

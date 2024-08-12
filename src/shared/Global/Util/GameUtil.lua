@@ -1,4 +1,6 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local DebugUtil = require(script.Parent.DebugUtil)
+local Promise = require(ReplicatedStorage.Packages.Promise)
 local GameUtil = {}
 
 function GameUtil.debounce(callback)
@@ -85,6 +87,21 @@ function GameUtil.arrtodict(arr: { any })
 	end
 
 	return dict
+end
+
+function GameUtil.playSound(name: string, attachTo)
+	local Sound = ReplicatedStorage.Assets.Sounds:FindFirstChild(name, true)
+	if not Sound then return end
+
+	local clonedSound = Sound:Clone()
+	clonedSound.Parent = attachTo
+
+	clonedSound:Play()
+
+	Promise.fromEvent(clonedSound.Stopped, function()
+		clonedSound:Destroy()
+		return true
+	end)
 end
 
 function GameUtil.search<T>(array, predict: (T) -> boolean)

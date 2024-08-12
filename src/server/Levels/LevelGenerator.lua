@@ -47,6 +47,17 @@ local function revertBrightness()
 	end
 end
 
+local function onNextLevelTouched(part, main)
+	local model = part:FindFirstAncestorOfClass("Model")
+	if not model then return end
+
+	local humanoid = model:FindFirstChildOfClass("Humanoid")
+	if not humanoid then return end
+
+	main:Destroy()
+	LevelConfig.generateNextLevel:Fire()
+end
+
 LevelConfig.generateLevel:Connect(function(jan: Janitor.Janitor, level: string)
 	-- Generate level
 	jan:Cleanup() -- Cleanup previous level!
@@ -70,6 +81,14 @@ LevelConfig.generateLevel:Connect(function(jan: Janitor.Janitor, level: string)
 		SpawnEntity.spawnLevelEntity:Fire()
 		ReplicatedStorage:SetAttribute("generatingNewLevel", false)
 		revertBrightness()
+
+		local nextLevel = LevelGenerator.currentMap:FindFirstChild("NextLevel")
+
+		if not nextLevel then return end
+
+		nextLevel.Touched:Connect(function(hit)
+			onNextLevelTouched(hit, nextLevel)
+		end)
 	end)
 end)
 

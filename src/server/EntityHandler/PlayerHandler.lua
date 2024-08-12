@@ -24,13 +24,13 @@ function PlayerHandler:Start()
 				true,
 				0.25,
 				0.3,
-				{ RootPart.CFrame.LookVector, 5, 1 }
+				{ RootPart.CFrame.LookVector, 1, 1 }
 			)
 		end
 	end)
 
 	Net:Connect("RollRE", function(Player: Player)
-		DamageHandler.AddIFrame(Player.UserId, 0.25)
+		DamageHandler.AddIFrame(Player.UserId, 0.5)
 		print("Rolled")
 	end)
 end
