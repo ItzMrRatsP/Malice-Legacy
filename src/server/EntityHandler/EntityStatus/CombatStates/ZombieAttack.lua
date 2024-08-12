@@ -64,6 +64,8 @@ return function(StateMachine, Id)
 			return
 		end
 
+		print("exited")
+
 		Humanoid.WalkSpeed = defaultWalkSpeed
 	end
 
