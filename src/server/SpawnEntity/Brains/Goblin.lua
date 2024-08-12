@@ -26,7 +26,7 @@ local function setPath(self, Path)
 end
 
 function Goblin:Start(Entity: Model)
-	local delayPerAttack = 10
+	local delayPerAttack = 2
 
 	local obj = {
 		Entity = Entity,
@@ -36,7 +36,7 @@ function Goblin:Start(Entity: Model)
 		Path = nil,
 		Damage = 15,
 		Radius = 20,
-		AttackRadius = 15,
+		AttackRadius = 2.5,
 		DelayPerAttack = delayPerAttack,
 		LatestAttack = os.clock() - delayPerAttack,
 	}
