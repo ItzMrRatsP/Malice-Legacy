@@ -90,7 +90,8 @@ end
 
 function CharacterHandler:Update(dt)
 	self.Humanoid.WalkSpeed = self.WalkSpeed
-
+	self.CharacterInstance.Torso.CanCollide = false
+	self.CharacterInstance.Head.CanCollide = false
 	local PositionGoal = self.Root.Position + self.Root.CFrame.UpVector * 25
 
 	local CameraPos = self.PosSpring.p

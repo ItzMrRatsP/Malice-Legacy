@@ -11,7 +11,7 @@ return function(StateMachine, Character)
 	local janitor = Janitor.new()
 	local State = StateMachine:AddState(script.Name)
 	local LastRoll = os.clock()
-	local Force = 30
+	local Force = 25
 	local Debounce = false
 
 	function State:Start()
@@ -35,7 +35,7 @@ return function(StateMachine, Character)
 				StateMachine.Rolling,
 			},
 			Condition = function(): boolean
-				return os.clock() - LastRoll >= 0.25
+				return os.clock() - LastRoll >= 0.5
 			end,
 		}, true)
 	end
@@ -53,6 +53,8 @@ return function(StateMachine, Character)
 		BodyVelocity.Velocity = Character.Root.CFrame.LookVector * Force
 		BodyVelocity.MaxForce = Vector3.one * math.huge
 		BodyVelocity.Parent = Character.Root
+
+		Character.CharacterAnimations["Roll"]:Play(0.1, 1, 1)
 	end
 
 	function State:Update(dt) end
