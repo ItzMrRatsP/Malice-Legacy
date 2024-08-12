@@ -45,6 +45,9 @@ function CharacterHandler.new(Character, PlayerHandler)
 	self.Animator = self.Humanoid:WaitForChild("Animator")
 	self.Root = self.CharacterInstance:WaitForChild("HumanoidRootPart")
 
+	self.Trail1 = self.CharacterInstance.Sword.Blade.NewTrail
+	self.Trail2 = self.CharacterInstance.Sword.Blade.NewTrail2
+
 	self.MovementTilt = MovementTilt.Init()
 
 	self.CharacterAnimations = {}
@@ -63,6 +66,7 @@ function CharacterHandler.new(Character, PlayerHandler)
 
 	self.PosSpring.s = 15
 	self.PosSpring.d = 0.6
+	self.CustomCamera = nil
 	self.CanLook = true
 
 	self.WalkSpeed = 1
@@ -83,6 +87,14 @@ function CharacterHandler.new(Character, PlayerHandler)
 		self:Update(DT)
 	end)
 
+	Net:Connect("EnteredShop", function(CameraPos)
+		self.CustomCamera = CameraPos
+	end)
+
+	Net:Connect("ExitShop", function()
+		self.CustomCamera = nil
+	end)
+
 	self.MovementStateMachine:Start(self.MovementStateMachine.Idling)
 	self.CombatStateMachine:Start(self.CombatStateMachine.InAction)
 	return self
@@ -95,9 +107,15 @@ function CharacterHandler:Update(dt)
 	local PositionGoal = self.Root.Position + self.Root.CFrame.UpVector * 25
 
 	local CameraPos = self.PosSpring.p
-	self.PosSpring.t = PositionGoal
+	if not self.CustomCamera then
+		Camera.CFrame = CFrame.new(CameraPos) * CFrame.Angles(math.rad(-90), 0, 0)
+		
+		self.PosSpring.t = PositionGoal
+	else
 
-	Camera.CFrame = CFrame.new(CameraPos) * CFrame.Angles(math.rad(-90), 0, 0)
+	end
+
+
 
 	if self.CanLook then
 		local RootPos, MousePos = self.Root.Position, Mouse.Hit.Position

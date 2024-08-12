@@ -4,10 +4,8 @@ local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
 -- Variables
-local Global = require(ReplicatedStorage.Global)
-
-local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local BehaviorTree = require(ReplicatedStorage.Vendors.BehaviorTreeCreator)
+local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local SimplePath = require(ReplicatedStorage.Vendors.SimplePath)
 
 local Goblin = {}
@@ -19,19 +17,17 @@ local function setPath(self, Path)
 	end)
 
 	Path.Blocked:Connect(function()
-		if self.HasTarget then
-			Path:Run(self.Target)
-		end
+		if self.HasTarget then Path:Run(self.Target) end
 	end)
 
 	Path.WaypointReached:Connect(function()
-		if self.HasTarget then
-			Path:Run(self.Target)
-		end
+		if self.HasTarget then Path:Run(self.Target) end
 	end)
 end
 
 function Goblin:Start(Entity: Model)
+	local delayPerAttack = 10
+
 	local obj = {
 		Entity = Entity,
 		Behavior = ServerStorage.Behaviors:FindFirstChild(Entity.Name),
@@ -39,9 +35,10 @@ function Goblin:Start(Entity: Model)
 		Target = nil,
 		Path = nil,
 		Damage = 15,
-		Radius = 5,
-		DelayPerAttack = 2,
-		LastestAttack = os.clock(),
+		Radius = 20,
+		AttackRadius = 15,
+		DelayPerAttack = delayPerAttack,
+		LatestAttack = os.clock() - delayPerAttack,
 	}
 
 	local janitor = Janitor.new()
@@ -60,7 +57,7 @@ function Goblin:Start(Entity: Model)
 	setPath(obj, obj.Path) -- Set path.
 
 	local EntityBrain =
-		BehaviorTree:Create(obj.Behavior:FindFirstChild("IdleState", true), obj)
+		BehaviorTree:Create(obj.Behavior:FindFirstChild("WalkState", true))
 
 	janitor:Add(RunService.PreSimulation:Connect(function()
 		EntityBrain:run(obj)
@@ -68,7 +65,7 @@ function Goblin:Start(Entity: Model)
 		if not obj.hasTarget then return end
 		if not obj.Target then return end
 
-		path:Run(obj.Target)
+		path:Run(obj.Target.PrimaryPart)
 	end))
 
 	local Humanoid = obj.Entity:FindFirstChild("Humanoid")

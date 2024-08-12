@@ -1,10 +1,12 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerStorage = game:GetService("ServerStorage")
 local TweenService = game:GetService("TweenService")
 
 local Global = require(ReplicatedStorage.Global)
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local LevelConfig = require(script.Parent.LevelConfig)
+local SpawnEntity = require(ServerStorage.Server.SpawnEntity)
 
 local LevelGenerator = {}
 LevelGenerator.currentMap = nil
@@ -27,9 +29,7 @@ end
 
 local function setLightBrightness(map: Model, brightness: number)
 	for _, lights in map:GetDescendants() do
-		if not lights:IsA("PointLight") then
-			continue
-		end
+		if not lights:IsA("PointLight") then continue end
 
 		-- if lights.Brightness == brightness then continue end
 
@@ -50,6 +50,7 @@ end
 LevelConfig.generateLevel:Connect(function(jan: Janitor.Janitor, level: string)
 	-- Generate level
 	jan:Cleanup() -- Cleanup previous level!
+	SpawnEntity.despawnLevelEntity:Fire()
 
 	jan:Add(function()
 		ReplicatedStorage:SetAttribute("generatingNewLevel", true)
@@ -66,6 +67,7 @@ LevelConfig.generateLevel:Connect(function(jan: Janitor.Janitor, level: string)
 	end
 
 	task.delay(1, function()
+		SpawnEntity.spawnLevelEntity:Fire()
 		ReplicatedStorage:SetAttribute("generatingNewLevel", false)
 		revertBrightness()
 	end)

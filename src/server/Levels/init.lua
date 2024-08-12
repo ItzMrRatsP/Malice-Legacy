@@ -19,9 +19,7 @@ function Levels:Start()
 		ReplicatedStorage:SetAttribute("generatingNewLevel", true)
 	end)
 
-	task.delay(0.1, function()
-		LevelConfig.generateLevel:Fire(jan, self.currentLevel)
-	end)
+	LevelConfig.generateLevel:Fire(jan, self.currentLevel)
 
 	LevelConfig.generateNextLevel:Connect(function()
 		local levels = Global.GameUtil.dicttoarr(LevelConfig.Levels)

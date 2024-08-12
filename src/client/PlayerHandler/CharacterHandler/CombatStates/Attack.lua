@@ -3,11 +3,10 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Global = require(ReplicatedStorage.Global)
 
-
 local Assets = ReplicatedStorage.Assets
 
 local Effects = Assets.Effects
-local Blood : ParticleEmitter = Effects.Blood
+local Blood: ParticleEmitter = Effects.Blood
 
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local Net = require(ReplicatedStorage.Packages.Net)
@@ -66,7 +65,9 @@ return function(StateMachine, Character)
 				StateMachine.InAction,
 			},
 			Condition = function(): boolean
-				if Character.MovementStateMachine.CurrentState == "Rolling" then return end
+				if Character.MovementStateMachine.CurrentState == "Rolling" then
+					return false
+				end
 				if Button1Down then LastAttack = os.clock() end
 				return Button1Down
 			end,
@@ -85,26 +86,34 @@ return function(StateMachine, Character)
 	end
 
 	function State:Enter()
+		if AttackNumber > 3 then AttackNumber = 1 end
 
-
-		if AttackNumber > 3 then
-			AttackNumber = 1
-		end
 		Character.CharacterAnimations["1"].Looped = false
 		Character.CharacterAnimations["2"].Looped = false
 		Character.CharacterAnimations["3"].Looped = false
 		Character.CharacterAnimations["4"].Looped = false
 
-		Character.CharacterAnimations["1"].Priority = Enum.AnimationPriority.Action
-		Character.CharacterAnimations["2"].Priority = Enum.AnimationPriority.Action
-		Character.CharacterAnimations["3"].Priority = Enum.AnimationPriority.Action
-		Character.CharacterAnimations["4"].Priority = Enum.AnimationPriority.Action
+		Character.CharacterAnimations["1"].Priority =
+			Enum.AnimationPriority.Action
+		Character.CharacterAnimations["2"].Priority =
+			Enum.AnimationPriority.Action
+		Character.CharacterAnimations["3"].Priority =
+			Enum.AnimationPriority.Action
+		Character.CharacterAnimations["4"].Priority =
+			Enum.AnimationPriority.Action
 
-		Character.CharacterAnimations[tostring(AttackNumber)]:Play(0.1,1,1)
-		
+		Character.CharacterAnimations[tostring(AttackNumber)]:Play(0.1, 1, 1)
+
 		AttackNumber += 1
 
-		task.wait(0.25)
+		if AttackNumber <= 2 then
+			task.wait(0.25)
+		else
+			task.wait(0.1)
+		end
+
+		Character.Trail1.Enabled = true
+		Character.Trail2.Enabled = true
 
 		local Params = OverlapParams.new()
 		Params.FilterType = Enum.RaycastFilterType.Exclude
@@ -128,6 +137,14 @@ return function(StateMachine, Character)
 		end
 
 		Attack:FireServer(humanoids)
+
+		task.delay(
+			Character.CharacterAnimations[tostring(AttackNumber)].Length - 0.25,
+			function()
+				Character.Trail1.Enabled = false
+				Character.Trail2.Enabled = false
+			end
+		)
 	end
 
 	function State:Update(dt) end

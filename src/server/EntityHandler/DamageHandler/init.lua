@@ -6,9 +6,8 @@ local EntityIFrames: { [number]: Model | number } = {}
 local DamageHandler = {}
 
 local EntityStatus = require(script.Parent.EntityStatus)
-local Ragdoll = require(ReplicatedStorage.Vendors.Ragdoll)
 local KnockbackHandler = require(ReplicatedStorage.Vendors.Knockback)
-
+local Ragdoll = require(ReplicatedStorage.Vendors.Ragdoll)
 
 local function hasActiveIFrame(entity: Model | number): boolean?
 	return not not table.find(EntityIFrames, entity)
@@ -63,7 +62,7 @@ function DamageHandler.AddIFrame(EntityID, Length)
 end
 
 function DamageHandler.DamageEntity(
-	EntityID: Model,
+	EntityID,
 	Damage,
 	DoStun,
 	StunLength,
@@ -73,8 +72,13 @@ function DamageHandler.DamageEntity(
 	local Entities = EntityStatus.Entities
 	local EntityState = Entities[EntityID]
 
-	local Humanoid = EntityID:FindFirstChildOfClass("Humanoid")
+	if EntityState.IsPlayer then
+		-- print("ITS PLAYER!")s
+		local PlayerModel = Players:GetPlayerByUserId(EntityID).Character
+		EntityID = PlayerModel
+	end
 
+	local Humanoid = EntityID:FindFirstChildOfClass("Humanoid")
 	if not Humanoid then return end
 	if Humanoid.Health <= 0 then return end
 
@@ -96,9 +100,11 @@ function DamageHandler.DamageEntity(
 	end
 
 	Humanoid:TakeDamage(Damage)
-	KnockbackHandler.Apply(EntityID, table.unpack(KnockBackParams))
 	local CurrentHealth = Humanoid.Health
 	if CurrentHealth <= 0 then Ragdoll.setRagdoll(EntityID, 100) end
+
+	if not KnockBackParams then return end
+	KnockbackHandler.Apply(EntityID, table.unpack(KnockBackParams))
 end
 
 return DamageHandler

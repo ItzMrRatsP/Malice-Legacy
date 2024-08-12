@@ -24,7 +24,6 @@ function EntityStatus.New(Id, IsPlayer)
 
 	if not IsPlayer then
 		local Humanoid : Humanoid = Id:FindFirstChildOfClass("Humanoid")
-
 		Humanoid.BreakJointsOnDeath = false
 	end
 

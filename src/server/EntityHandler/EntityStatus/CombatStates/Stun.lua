@@ -10,6 +10,7 @@ local RNG = Random.new()
 return function(StateMachine, Id)
 	local State = StateMachine:AddState(script.Name)
 	local LastStunAnimation = 1
+	local defaultWalkSpeed = 0
 
 	function State:Start() end
 
@@ -24,7 +25,7 @@ return function(StateMachine, Id)
 
 		if not model:IsA("Model") then return end
 
-		local Humanoid = Id:FindFirstChildOfClass("Humanoid")
+		local Humanoid = model:FindFirstChildOfClass("Humanoid")
 		if not Humanoid then
 			Global.DebugUtil(
 				`No humanoid exist in the given entity model {Id.Name}`
@@ -32,6 +33,7 @@ return function(StateMachine, Id)
 			return
 		end
 
+		defaultWalkSpeed = Humanoid.WalkSpeed
 		Humanoid.WalkSpeed = 0
 
 		local Animator = Humanoid:FindFirstChildOfClass("Animator")
@@ -55,7 +57,25 @@ return function(StateMachine, Id)
 
 	function State:Update(dt) end
 
-	function State:Exit() end
+	function State:Exit()
+		local model = Id
+
+		if typeof(model) == "number" then
+			model = Players:GetPlayerByUserId(model).Character
+		end
+
+		if not model:IsA("Model") then return end
+
+		local Humanoid = model:FindFirstChildOfClass("Humanoid")
+		if not Humanoid then
+			Global.DebugUtil(
+				`No humanoid exist in the given entity model {Id.Name}`
+			)
+			return
+		end
+
+		Humanoid.WalkSpeed = defaultWalkSpeed
+	end
 
 	return State
 end

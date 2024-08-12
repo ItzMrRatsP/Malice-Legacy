@@ -14,14 +14,21 @@ function PlayerHandler:Start()
 	Net:Connect("AttackRE", function(Player: Player, HumanoidModels: { Model? })
 		local Character = Player.Character
 
-		local RootPart : BasePart = Character:WaitForChild("HumanoidRootPart")
+		local RootPart: BasePart = Character:WaitForChild("HumanoidRootPart")
 		-- Humanoi Models:
 		for _, model in HumanoidModels do
 			-- damage entity:
-			DamageHandler.DamageEntity(model, 15, true, 0.25, 0.3, {RootPart.CFrame.LookVector, 5, 1})
+			DamageHandler.DamageEntity(
+				model,
+				15,
+				true,
+				0.25,
+				0.3,
+				{ RootPart.CFrame.LookVector, 5, 1 }
+			)
 		end
 	end)
-	
+
 	Net:Connect("RollRE", function(Player: Player)
 		DamageHandler.AddIFrame(Player.UserId, 0.25)
 		print("Rolled")
