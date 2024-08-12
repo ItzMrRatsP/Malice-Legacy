@@ -50,7 +50,7 @@ function ShopKeeperHandler.Entered(Level)
 	end)
 
 	ShopKeeperZone.playerEntered:Connect(function(player) 
-        EnteredRemote:FireClient(player, Camera.CFrame)
+        EnteredRemote:FireClient(player, Camera)
     end)
 
 	ShopKeeperZone.playerExited:Connect(function(player) 
@@ -58,8 +58,5 @@ function ShopKeeperHandler.Entered(Level)
     end)
 end
 
-function ShopKeeperHandler.Left() end
-
-function ShopKeeperHandler.WithinRange() end
 
 return ShopKeeperHandler

@@ -87,8 +87,8 @@ function CharacterHandler.new(Character, PlayerHandler)
 		self:Update(DT)
 	end)
 
-	Net:Connect("EnteredShop", function(CameraPos)
-		self.CustomCamera = CameraPos
+	Net:Connect("EnteredShop", function(CameraPart)
+		self.CustomCamera = CameraPart.CFrame
 	end)
 
 	Net:Connect("ExitShop", function()
@@ -112,7 +112,7 @@ function CharacterHandler:Update(dt)
 		
 		self.PosSpring.t = PositionGoal
 	else
-
+		Camera.CFrame = Camera.CFrame:Lerp(self.CustomCamera, 0.1)
 	end
 
 
