@@ -6,6 +6,15 @@ local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local spawnEntity = {}
 local spawnTag = "SpawnEntity" -- Tag for all spawn points!
 
+local Brains = script.Brains
+
+local function addAI(Name: string, EntityModel: Model): boolean
+	if not Brains:FindFirstChild(Name) then return false end
+
+	local brain = require(Brains:FindFirstChild(Name))
+	brain:Start(EntityModel)
+end
+
 local function createNPC(spawn: BasePart, name: string)
 	local janitor = Janitor.new()
 
@@ -22,23 +31,25 @@ local function createNPC(spawn: BasePart, name: string)
 	npc:PivotTo(spawn.CFrame)
 	npc.Parent = workspace.Enemies
 
+	addAI(name, npc) -- Spawns the AI
+
 	-- Spawn title:
 	local humanoid = npc:FindFirstChild("Humanoid")
 	if not humanoid then return end
 
-	janitor:Add(
-		humanoid.Died:Connect(function()
-			janitor:Destroy()
-			task.delay(
-				npc:GetAttribute("respawnTime") or 0.35,
-				createNPC,
-				spawn,
-				name
-			)
-		end),
+	-- janitor:Add(
+	-- 	humanoid.Died:Connect(function()
+	-- 		janitor:Destroy()
+	-- 		task.delay(
+	-- 			npc:GetAttribute("respawnTime") or 0.35,
+	-- 			createNPC,
+	-- 			spawn,
+	-- 			name
+	-- 		)
+	-- 	end),
 
-		"Disconnect"
-	)
+	-- 	"Disconnect"
+	-- )
 end
 
 function spawnEntity:Start()

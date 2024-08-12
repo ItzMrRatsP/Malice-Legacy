@@ -29,7 +29,7 @@ function Levels:Start()
 
 		self.currentLevel = levels[self.currentLevel + 1]
 		LevelConfig.generateLevel:Fire(jan, self.currentLevel)
-		ShopKeeperHandler.Entered(self.currentLevel)
+		ShopKeeperHandler.Entered(LevelGenerator.currentMap)
 	end)
 end
 

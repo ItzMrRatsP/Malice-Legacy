@@ -13,6 +13,7 @@ local Detection = {}
 
 local function setTransparency(part, transparency: number): Janitor.Janitor?
 	local jan = Janitor.new()
+	if part:HasTag("IgnoreCamTrans") then return end
 	if not part:IsA("BasePart") then return end -- Just in-case
 
 	local t = jan:Add(
