@@ -46,12 +46,10 @@ local function createNPC(spawn: BasePart, name: string)
 
 	janitor:Add(
 		humanoid.Died:Connect(function()
-
 			task.spawn(function()
 				spawn:SetAttribute("Dead", true)
 			end)
-			
-			print("Dead")
+
 			task.wait(2)
 			table.remove(spawnedEntity, table.find(spawnedEntity, janitor))
 			if janitor.Destroy then janitor:Destroy() end

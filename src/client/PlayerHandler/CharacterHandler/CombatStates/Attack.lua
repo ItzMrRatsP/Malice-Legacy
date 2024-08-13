@@ -38,7 +38,7 @@ local function createHitbox(root: BasePart?): BasePart?
 	hb.CanTouch = false
 	hb.CanQuery = false
 	hb.Massless = true
-	hb.Transparency = 0.99
+	hb.Transparency = 1
 	hb.Material = Enum.Material.Neon
 	hb.Size = Vector3.new(7, 5, 7)
 	hb.CFrame = root.CFrame * CFrame.new(0, 0, -5)
@@ -51,6 +51,7 @@ end
 return function(StateMachine, Character)
 	local State = StateMachine:AddState(script.Name)
 	local AttackNumber = 1
+
 	function State:Start()
 		local Button1Down = false
 		local LastAttack = os.clock()
@@ -65,7 +66,10 @@ return function(StateMachine, Character)
 				StateMachine.InAction,
 			},
 			Condition = function(): boolean
-				if Character.MovementStateMachine.CurrentState.Name == "Rolling" then
+				if
+					Character.MovementStateMachine.CurrentState.Name
+					== "Rolling"
+				then
 					return false
 				end
 				if Button1Down then LastAttack = os.clock() end
@@ -112,17 +116,19 @@ return function(StateMachine, Character)
 		local DoorOpen = false
 
 		for _, part: BasePart in Parts do
-			if part:HasTag("Door") and part.Anchored then
-				DoorOpen = true
-			end
+			if part:HasTag("Door") and part.Anchored then DoorOpen = true end
 		end
 
 		if not DoorOpen then
-			Character.CharacterAnimations[tostring(AttackNumber)]:Play(0.1, 1, 1)
+			Character.CharacterAnimations[tostring(AttackNumber)]:Play(
+				0.1,
+				1,
+				1
+			)
 			Global.GameUtil.playSound(`Swoosh{AttackNumber}`, Character.Root)
 
 			AttackNumber += 1
-		else		
+		else
 			Character.CharacterAnimations["Kick"].Looped = false
 			Character.CharacterAnimations["Kick"]:Play(0.1, 1, 1)
 		end
@@ -142,6 +148,7 @@ return function(StateMachine, Character)
 
 		local hb = jan:Add(createHitbox(Character.Root))
 		local Parts = workspace:GetPartsInPart(hb, Params)
+
 		local humanoids = {}
 		local Breakables = {}
 

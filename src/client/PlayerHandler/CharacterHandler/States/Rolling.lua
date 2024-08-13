@@ -1,6 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 
+local Global = require(ReplicatedStorage.Global)
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local Net = require(ReplicatedStorage.Packages.Net)
 
@@ -14,10 +15,10 @@ return function(StateMachine, Character)
 	local Force = 25
 	local Debounce = false
 
-	local Cooldown = (1/workspace:GetAttribute("Roll_Multi"))
+	local Cooldown = (1 / workspace:GetAttribute("Roll_Multi"))
 
 	workspace:GetAttributeChangedSignal("Roll_Multi"):Connect(function()
-		Cooldown = (1/workspace:GetAttribute("Roll_Multi"))
+		Cooldown = (1 / workspace:GetAttribute("Roll_Multi"))
 	end)
 
 	function State:Start()
@@ -29,7 +30,9 @@ return function(StateMachine, Character)
 				StateMachine.Walking,
 			},
 			Condition = function(): boolean
-				if Character.CombatStateMachine.CurrentState.Name == "Attack" then
+				if
+					Character.CombatStateMachine.CurrentState.Name == "Attack"
+				then
 					return false
 				end
 				return UserInputService:IsKeyDown(Enum.KeyCode.Space)
@@ -63,6 +66,7 @@ return function(StateMachine, Character)
 		BodyVelocity.MaxForce = Vector3.one * math.huge
 		BodyVelocity.Parent = Character.Root
 
+		Global.GameUtil.playSound("Roll", Character.Root, janitor)
 		Character.CharacterAnimations["Roll"]:Play(0.1, 1, 1)
 	end
 

@@ -2,15 +2,16 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 
+local GameTimer = require(ServerStorage.Server.GameTimer)
 local Global = require(ReplicatedStorage.Global)
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local LevelConfig = require(script.LevelConfig)
 local LevelGenerator = require(script.LevelGenerator)
+local MoneyStats = require(ServerStorage.Server.MoneyStats)
 local Net = require(ReplicatedStorage.Packages.Net)
 local ShopKeeperHandler = require(script.ShopKeeperHandler)
-local GameTimer = require(ServerStorage.Server.GameTimer)
-local MoneyStats = require(ServerStorage.Server.MoneyStats)
 
+Net:RemoteEvent("CutsceneStarted2")
 local Levels = {}
 Levels.currentLevel = LevelConfig.Levels.LevelOne
 
@@ -37,9 +38,12 @@ function Levels:Start()
 		if not levels[self.currentLevel + 1] then return end
 
 		local serverTimeNow = workspace:GetServerTimeNow()
-		local toAdd = ReplicatedStorage:GetAttribute("FinishTime") - serverTimeNow
-		
-		MoneyStats.UpdateMoney:Fire(ReplicatedStorage:GetAttribute("Money") + toAdd)
+		local toAdd = ReplicatedStorage:GetAttribute("FinishTime")
+			- serverTimeNow
+
+		MoneyStats.UpdateMoney:Fire(
+			ReplicatedStorage:GetAttribute("Money") + toAdd
+		)
 		GameTimer.StartTimer:Fire()
 
 		self.currentLevel = levels[self.currentLevel + 1]

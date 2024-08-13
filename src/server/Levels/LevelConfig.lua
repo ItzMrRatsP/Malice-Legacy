@@ -18,7 +18,7 @@ currentLevels.Maps = {
 	[currentLevels.Levels.LevelOne] = workspace.Levels.LevelOne,
 	[currentLevels.Levels.LevelTwo] = workspace.Levels.LevelTwo,
 	[currentLevels.Levels.LevelThree] = workspace.Levels.LevelThree,
-	[currentLevels.Levels.LevelFour] = workspace.Levels.LevelFour
+	[currentLevels.Levels.LevelFour] = workspace.Levels.LevelFour,
 }
 
 return currentLevels

@@ -15,6 +15,7 @@ local MovementTilt = require(script.MovementTilt)
 local Net = require(ReplicatedStorage.Packages.Net)
 local Promise = require(ReplicatedStorage.Packages.Promise)
 local Spring = require(Vendors.Spring)
+local StatHandler = require(ReplicatedStorage.Client.StatHandler)
 
 local CutsceneModel = workspace:WaitForChild("CutscenePart")
 
@@ -43,7 +44,6 @@ local function DisableStates(Humanoid, States)
 		Humanoid:SetStateEnabled(State, false)
 	end
 end
-
 
 function CharacterHandler.new(Character, PlayerHandler)
 	local self = setmetatable({}, CharacterHandler)
@@ -107,10 +107,12 @@ function CharacterHandler.new(Character, PlayerHandler)
 
 	DisableStates(self.Humanoid, HumanoidDisabledStates)
 
-	self.Janitor:Add(RunService.PreRender:Connect(function(DT)
-		self:Update(DT)
-	end), "Disconnect")
-	
+	self.Janitor:Add(
+		RunService.PreRender:Connect(function(DT)
+			self:Update(DT)
+		end),
+		"Disconnect"
+	)
 
 	self.LerpSpeed = 0.1
 
@@ -121,8 +123,6 @@ function CharacterHandler.new(Character, PlayerHandler)
 	Net:Connect("ExitShop", function()
 		self.CustomCamera = nil
 	end)
-
-
 
 	Net:Connect("CutsceneStarted", function()
 		local ShirtClone = self.CharacterInstance:WaitForChild("Shirt"):Clone()
@@ -164,6 +164,10 @@ function CharacterHandler.new(Character, PlayerHandler)
 			self.LerpSpeed = 0.1
 			CameraDetection.Enabled = true
 			Camera.FieldOfView = 80
+
+			-- Set the UI:
+			StatHandler.StartStats:Fire()
+
 			task.delay(2, function()
 				ReplicatedStorage:SetAttribute("generatingNewLevel", false)
 			end)
@@ -171,7 +175,7 @@ function CharacterHandler.new(Character, PlayerHandler)
 			return true
 		end)
 	end)
-
+	
 	self.MovementStateMachine:Start(self.MovementStateMachine.Idling)
 	self.CombatStateMachine:Start(self.CombatStateMachine.InAction)
 	return self

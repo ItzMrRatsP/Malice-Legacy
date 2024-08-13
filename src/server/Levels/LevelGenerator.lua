@@ -71,7 +71,7 @@ LevelConfig.generateLevel:Connect(function(jan: Janitor.Janitor, level: string)
 	-- 	ReplicatedStorage:SetAttribute("generatingNewLevel", true)
 	-- end)
 
-	LevelGenerator.currentMap = jan:Add(LevelConfig.Maps[level]:Clone())
+	LevelGenerator.currentMap = jan:Add(LevelConfig.Maps[level])
 	LevelGenerator.currentMap.Parent = workspace.Levels
 	LevelGenerator.currentMap:PivotTo(CFrame.new(workspace.SpawnLevel.Position))
 

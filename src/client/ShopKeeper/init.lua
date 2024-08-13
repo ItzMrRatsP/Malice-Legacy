@@ -90,7 +90,7 @@ local function generateStat(value, name)
 	end)
 
 	stat.Main.MouseEnter:Connect(function()
-		ReplicatedStorage.Assets.Sounds.UI.Enter:Play()
+		ReplicatedStorage.Assets.Sounds.UI.Hover:Play()
 		mouseEntered:set(true)
 	end)
 
@@ -110,8 +110,6 @@ function ShopKeeperHandler:Start()
 
 	local PlayerGui = Player.PlayerGui
 
-	
-
 	for name, attribute in workspace:GetAttributes() do
 		MultiAttributes[name] = Value(attribute)
 
@@ -126,14 +124,20 @@ function ShopKeeperHandler:Start()
 	Net:Connect("Dialogue", function(Message)
 		dialogueJanitor:Cleanup()
 
-		local Dialogue = dialogueJanitor:Add(ReplicatedStorage.Assets.UI:FindFirstChild("Dialogue"):Clone())
+		local Dialogue = dialogueJanitor:Add(
+			ReplicatedStorage.Assets.UI:FindFirstChild("Dialogue"):Clone()
+		)
 		Dialogue.Parent = PlayerGui
 
 		local Text = Dialogue.Text
 		Global.UIUtil.typewrite(Message, Text, {})
 
 		task.delay(1, function()
-			Global.UIUtil.untypewrite(Message, Text, {_destroy = true, _todestroy = Dialogue})
+			Global.UIUtil.untypewrite(
+				Message,
+				Text,
+				{ _destroy = true, _todestroy = Dialogue }
+			)
 		end)
 	end)
 
