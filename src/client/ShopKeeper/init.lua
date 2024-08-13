@@ -19,6 +19,8 @@ local Computed = Fusion.Computed
 local ShopKeeperHandler = {}
 local MultiAttributes = {}
 
+local dialogueJanitor = Janitor.new()
+
 local function countFrames(Holder)
 	local num = 0
 
@@ -82,11 +84,13 @@ local function generateStat(value, name)
 
 	stat.Main.Upgrade.MouseButton1Click:Connect(function()
 		-- if ReplicatedStorage:GetAttribute("Money") < price:get() then return end
+		ReplicatedStorage.Assets.Sounds.UI.Click:Play()
 		if workspace:GetAttribute(name) >= Max then return end
 		Net:RemoteEvent("UpdateMoney"):FireServer(price:get(), name)
 	end)
 
 	stat.Main.MouseEnter:Connect(function()
+		ReplicatedStorage.Assets.Sounds.UI.Enter:Play()
 		mouseEntered:set(true)
 	end)
 
@@ -106,6 +110,8 @@ function ShopKeeperHandler:Start()
 
 	local PlayerGui = Player.PlayerGui
 
+	
+
 	for name, attribute in workspace:GetAttributes() do
 		MultiAttributes[name] = Value(attribute)
 
@@ -116,6 +122,20 @@ function ShopKeeperHandler:Start()
 
 	local janitor = Janitor.new()
 	-- local attributes = Global.GameUtil.dicttoarr(MultiAttributes)
+
+	Net:Connect("Dialogue", function(Message)
+		dialogueJanitor:Cleanup()
+
+		local Dialogue = dialogueJanitor:Add(ReplicatedStorage.Assets.UI:FindFirstChild("Dialogue"):Clone())
+		Dialogue.Parent = PlayerGui
+
+		local Text = Dialogue.Text
+		Global.UIUtil.typewrite(Message, Text, {})
+
+		task.delay(1, function()
+			Global.UIUtil.untypewrite(Message, Text, {_destroy = true, _todestroy = Dialogue})
+		end)
+	end)
 
 	Net:Connect("EnteredShop", function()
 		local ShopkeeperUI = janitor:Add(

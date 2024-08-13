@@ -1,5 +1,6 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Net = require(ReplicatedStorage.Packages.Net)
 
 local LocalPlayer = Players.LocalPlayer
 
@@ -15,6 +16,9 @@ local function OnCharacterRemove()
 		PlayerHandler.Character = nil
 	end
 end
+
+
+
 
 local function OnCharacterAdded(Character)
 	OnCharacterRemove()

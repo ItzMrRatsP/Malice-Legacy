@@ -14,6 +14,12 @@ return function(StateMachine, Character)
 	local Force = 25
 	local Debounce = false
 
+	local Cooldown = (1/workspace:GetAttribute("Roll_Multi"))
+
+	workspace:GetAttributeChangedSignal("Roll_Multi"):Connect(function()
+		Cooldown = (1/workspace:GetAttribute("Roll_Multi"))
+	end)
+
 	function State:Start()
 		StateMachine:AddEvent({
 			Name = "RollEvent",
@@ -68,7 +74,7 @@ return function(StateMachine, Character)
 
 		janitor:Cleanup()
 
-		task.delay(1, function()
+		task.delay(Cooldown, function()
 			Debounce = false
 		end)
 	end

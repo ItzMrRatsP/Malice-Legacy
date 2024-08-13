@@ -24,4 +24,26 @@ function UIUtil.typewrite(
 	end
 end
 
+function UIUtil.untypewrite(
+	text: string,
+	label: TextLabel,
+	properties: { typeSpeed: number?, grammarDelay: number?, _destroy: boolean?, _todestroy: GuiObject? }
+)
+	local goalText = text
+	local metaProperties = setmetatable(
+		properties,
+		{ __index = { typeSpeed = 0.1, grammarDelay = 0.25, _destroy = false } }
+	)
+
+	for index = #text, 0, -1 do
+		local currentText = string.sub(text, 1, index)
+		goalText = currentText
+		label.Text = goalText
+
+		task.wait(metaProperties.typeSpeed)
+	end
+
+	if metaProperties._destroy and properties._todestroy then return properties._todestroy:Destroy() end
+end
+
 return UIUtil

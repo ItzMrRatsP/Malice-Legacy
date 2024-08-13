@@ -78,7 +78,13 @@ LevelConfig.generateLevel:Connect(function(jan: Janitor.Janitor, level: string)
 	setLightBrightness(LevelGenerator.currentMap, 0)
 
 	for _, player in Players:GetPlayers() do
+		local Char = player.Character
+		local hmrpt = Char:FindFirstChild("HumanoidRootPart")
+		hmrpt.Anchored = true
+		task.wait(1)
 		spawnPlayer(player.Character)
+		task.wait(1)
+		hmrpt.Anchored = false
 	end
 
 	task.delay(1, function()

@@ -22,6 +22,7 @@ local ZonePlus = require(Vendors.Zone)
 
 local EnteredRemote = Net:RemoteEvent("EnteredShop")
 local ExitRemote = Net:RemoteEvent("ExitShop")
+local Dialogue = Net:RemoteEvent("Dialogue")
 
 local RNG = Random.new()
 
@@ -55,6 +56,7 @@ function ShopKeeperHandler.Entered(Level)
 
 	ShopKeeperHandler.playBought:Connect(function()
 		-- ShopKeeper
+		if not Shop.ShopZone then return end
 		audioJanitor:Cleanup()
 
 		local randomSound = getRandomSound(BoughtsVoice)
@@ -69,14 +71,13 @@ function ShopKeeperHandler.Entered(Level)
 	local DoorCollider: BasePart = Shop:FindFirstChild("DoorCollider")
 
 	local Camera = Shop:FindFirstChild("Camera")
-
-	local TweenDoorOpen = TweenService:Create(Door, DoorInfo, {
-		Orientation = Door.Orientation - Vector3.new(0, OrientationOffset, 0),
-	})
 	local TweenDoorClose =
 		TweenService:Create(Door, DoorInfo, { Orientation = Door.Orientation })
+	local Orientation = Door.Orientation - Vector3.new(0, OrientationOffset, 0)
+	local TweenDoorOpen = TweenService:Create(Door, DoorInfo, {
+		Orientation = Orientation,
+	})
 
-	TweenDoorOpen:Play()
 
 	LeaveZone.playerEntered:Connect(function(player)
 		TweenDoorClose:Play()
@@ -90,13 +91,17 @@ function ShopKeeperHandler.Entered(Level)
 			PlayedLeave = true
 		end
 
+		Shop:SetAttribute("Left", true)
+
 		print(("%s entered the zone!"):format(player.Name))
 	end)
 
 	ShopKeeperZone.playerEntered:Connect(function(player)
+		Dialogue:FireAllClients("Hello!")
 		EnteredRemote:FireClient(player, Camera, Shop.ShopZone)
-
+		TweenDoorOpen:Play()
 		if Played then return end
+		
 		Played = true
 
 		audioJanitor:Cleanup()

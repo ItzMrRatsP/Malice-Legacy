@@ -99,7 +99,8 @@ function DamageHandler.DamageEntity(
 		end)
 	end
 
-	Humanoid:TakeDamage(Damage)
+	Humanoid:TakeDamage(Damage * workspace:GetAttribute("Damage_Multi"))
+	
 	local CurrentHealth = Humanoid.Health
 	if CurrentHealth <= 0 then Ragdoll.setRagdoll(EntityID, 100) end
 

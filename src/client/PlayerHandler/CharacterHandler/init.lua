@@ -44,6 +44,7 @@ local function DisableStates(Humanoid, States)
 	end
 end
 
+
 function CharacterHandler.new(Character, PlayerHandler)
 	local self = setmetatable({}, CharacterHandler)
 
@@ -72,7 +73,7 @@ function CharacterHandler.new(Character, PlayerHandler)
 
 	self.PosSpring = Spring.new(Vector3.new())
 	Camera.CameraType = Enum.CameraType.Scriptable
-	Camera.FieldOfView = 60
+	Camera.FieldOfView = 80
 
 	self.PosSpring.s = 15
 	self.PosSpring.d = 0.6
@@ -88,6 +89,9 @@ function CharacterHandler.new(Character, PlayerHandler)
 		CameraAnimator:LoadAnimation(CutsceneAnimations.CameraAnimation)
 	local PlayerAnimation =
 		PlayerAnimator:LoadAnimation(CutsceneAnimations.PlayerAnimation)
+	local CutsceneSound = CutsceneAnimations.CutsceneSound:Clone()
+
+	CutsceneSound.Parent = workspace
 
 	self.WalkSpeed = 1
 
@@ -117,10 +121,12 @@ function CharacterHandler.new(Character, PlayerHandler)
 		self.CustomCamera = nil
 	end)
 
+
+
 	Net:Connect("CutsceneStarted", function()
 		local ShirtClone = self.CharacterInstance:WaitForChild("Shirt"):Clone()
 		local PantClone = self.CharacterInstance:WaitForChild("Pants"):Clone()
-
+		Camera.FieldOfView = 60
 		ShirtClone.Parent = CutScenePlayer
 		PantClone.Parent = CutScenePlayer
 
@@ -130,7 +136,7 @@ function CharacterHandler.new(Character, PlayerHandler)
 		for _, Object: BasePart in self.CharacterInstance:GetChildren() do
 			if Object:IsA("Accessory") then
 				local AccessoryClone = Object:Clone()
-				if not AccessoryClone.Handle then continue end
+				if not AccessoryClone:FindFirstChild("Handle") then continue end
 				AccessoryClone.Handle.AccessoryWeld.Part1 =
 					CutScenePlayer:WaitForChild("Head")
 				AccessoryClone.Parent = CutScenePlayer
@@ -144,6 +150,8 @@ function CharacterHandler.new(Character, PlayerHandler)
 		CameraAnimation:Play()
 		PlayerAnimation:Play()
 
+		CutsceneSound:Play()
+
 		self.CustomCamera = CameraRig:WaitForChild("Torso")
 		self.LerpSpeed = 1
 
@@ -154,7 +162,7 @@ function CharacterHandler.new(Character, PlayerHandler)
 			self.CustomCamera = nil
 			self.LerpSpeed = 0.1
 			CameraDetection.Enabled = true
-
+			Camera.FieldOfView = 80
 			task.delay(2, function()
 				ReplicatedStorage:SetAttribute("generatingNewLevel", false)
 			end)

@@ -11,6 +11,7 @@ return {
 	GameUtil = require(Util.GameUtil),
 	DebugUtil = require(Util.DebugUtil),
 	StateMachine = require(Util.StateMachine),
+	UIUtil = require(Util.UIUtil),
 
 	-- Folders
 	Enums = Enums,

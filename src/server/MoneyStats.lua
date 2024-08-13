@@ -15,7 +15,7 @@ function MoneyStats:Start()
 	ReplicatedStorage:SetAttribute(Name, DefaultMoney)
 
 	self.UpdateMoney:Connect(function(NewValue: number)
-		ReplicatedStorage:SetAttribute(Name, NewValue)
+		ReplicatedStorage:SetAttribute(Name, math.ceil(NewValue))
 	end)
 
 	Net:Connect("UpdateMoney", function(_, Remove: number, name: string)
