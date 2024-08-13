@@ -11,6 +11,8 @@ local PlayerHandler = {
 }
 
 local function OnCharacterRemove()
+
+	print("New Character")
 	if PlayerHandler.Character then
 		PlayerHandler.Character:Destroy()
 		PlayerHandler.Character = nil

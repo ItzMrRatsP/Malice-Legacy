@@ -107,9 +107,10 @@ function CharacterHandler.new(Character, PlayerHandler)
 
 	DisableStates(self.Humanoid, HumanoidDisabledStates)
 
-	RunService.PreRender:Connect(function(DT)
+	self.Janitor:Add(RunService.PreRender:Connect(function(DT)
 		self:Update(DT)
-	end)
+	end), "Disconnect")
+	
 
 	self.LerpSpeed = 0.1
 
