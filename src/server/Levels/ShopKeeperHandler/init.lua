@@ -15,7 +15,9 @@ local OrientationOffset = 120
 
 local Global = require(ReplicatedStorage.Global)
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
+local LemonSignal = require(ReplicatedStorage.Packages.LemonSignal)
 local Net = require(ReplicatedStorage.Packages.Net)
+local ShopKeeper = require(ReplicatedStorage.Client.ShopKeeper)
 local ZonePlus = require(Vendors.Zone)
 
 local EnteredRemote = Net:RemoteEvent("EnteredShop")
@@ -24,7 +26,10 @@ local ExitRemote = Net:RemoteEvent("ExitShop")
 local RNG = Random.new()
 
 local ShopKeeperHandler = {}
+
+ShopKeeperHandler.playBought = LemonSignal.new()
 ShopKeeperHandler.AlreadyGreeted = false
+ShopKeeperHandler.BoughtSomething = false
 
 local function getRandomSound(folder)
 	local randomIndex = RNG:NextInteger(1, #folder:GetChildren())
@@ -43,8 +48,20 @@ function ShopKeeperHandler.Entered(Level)
 	local GreetingVoice = Sounds:FindFirstChild("Greetings")
 	local LeavingVoice = Sounds:FindFirstChild("Leaving")
 	local Greetings_AgainVoice = Sounds:FindFirstChild("Greetings_Again")
+	local Left_Nothing_Bought = Sounds:FindFirstChild("Left_Nothing_Bought")
+	local BoughtsVoice = Sounds:FindFirstChild("Boughts")
 
 	local audioJanitor = Janitor.new()
+
+	ShopKeeperHandler.playBought:Connect(function()
+		-- ShopKeeper
+		audioJanitor:Cleanup()
+
+		local randomSound = getRandomSound(BoughtsVoice)
+		Global.GameUtil.playSound(randomSound, Shop.ShopZone, audioJanitor)
+
+		ShopKeeperHandler.BoughtSomething = true
+	end)
 
 	local LeaveZone = ZonePlus.new(Shop.LeaveZone)
 	local ShopKeeperZone = ZonePlus.new(Shop.ShopZone)
@@ -78,7 +95,6 @@ function ShopKeeperHandler.Entered(Level)
 
 	ShopKeeperZone.playerEntered:Connect(function(player)
 		EnteredRemote:FireClient(player, Camera, Shop.ShopZone)
-		print(ShopKeeperHandler.AlreadyGreeted)
 
 		if Played then return end
 		Played = true

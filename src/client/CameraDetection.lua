@@ -6,10 +6,12 @@ local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local Camera = workspace.CurrentCamera
 
 local triggerCamera = {}
+
 local info =
 	TweenInfo.new(0.25, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
 
 local Detection = {}
+Detection.Enabled = true
 
 local function setTransparency(part, transparency: number): Janitor.Janitor?
 	local jan = Janitor.new()
@@ -32,6 +34,8 @@ local function setTransparency(part, transparency: number): Janitor.Janitor?
 end
 
 local function CheckInBound()
+	if not Detection.Enabled then return end
+
 	local parts: { BasePart? } =
 		workspace:GetPartBoundsInBox(Camera.CFrame, Vector3.new(5, 5, 15))
 

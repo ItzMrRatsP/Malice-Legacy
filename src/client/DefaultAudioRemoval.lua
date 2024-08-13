@@ -12,9 +12,7 @@ local function RemoveAudio(PlayerCharacter: Model, name: string)
 	local Hmrpt = PlayerCharacter:WaitForChild("HumanoidRootPart")
 	local Audio = Hmrpt:WaitForChild(name)
 
-	if not Audio then
-		return
-	end
+	if not Audio then return end
 
 	Audio.Volume = 0
 end

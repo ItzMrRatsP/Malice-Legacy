@@ -34,14 +34,13 @@ local function summonWoodenParts(position, radius, partCount, impulseStrength)
 end
 
 local function summonClayShards(Size, Target)
-	local ClayShards : Model = Assets.Debris:Clone()
+	local ClayShards: Model = Assets.Debris:Clone()
 
 	ClayShards:ScaleTo(Size * 0.15)
 
 	ClayShards:PivotTo(Target)
 	ClayShards.Parent = workspace
 end
-
 
 -- Example usage: Summon 10 wooden parts in a radius of 20 studs with an impulse strength of 50
 local examplePosition = Vector3.new(0, 50, 0) -- Example position (above the ground)
@@ -72,7 +71,8 @@ function PlayerHandler:Start()
 			for _, Part in Breakables do
 				if Part:HasTag("Door") then
 					Part.Anchored = false
-					local PlayerRootPart = Player.Character:WaitForChild("HumanoidRootPart")
+					local PlayerRootPart =
+						Player.Character:WaitForChild("HumanoidRootPart")
 					local Door = BreakSound.Door:Clone()
 
 					Door.Parent = Part

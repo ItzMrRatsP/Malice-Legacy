@@ -62,12 +62,14 @@ end
 
 LevelConfig.generateLevel:Connect(function(jan: Janitor.Janitor, level: string)
 	-- Generate level
+
+	ReplicatedStorage:SetAttribute("generatingNewLevel", true)
 	jan:Cleanup() -- Cleanup previous level!
 	SpawnEntity.despawnLevelEntity:Fire()
 
-	jan:Add(function()
-		ReplicatedStorage:SetAttribute("generatingNewLevel", true)
-	end)
+	-- jan:Add(function()
+	-- 	ReplicatedStorage:SetAttribute("generatingNewLevel", true)
+	-- end)
 
 	LevelGenerator.currentMap = jan:Add(LevelConfig.Maps[level]:Clone())
 	LevelGenerator.currentMap.Parent = workspace.Levels

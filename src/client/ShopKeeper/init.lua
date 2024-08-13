@@ -16,17 +16,18 @@ local Hydrate = Fusion.Hydrate
 local Spring = Fusion.Spring
 local Computed = Fusion.Computed
 
-local Sounds = ReplicatedStorage.Assets.Sounds.Emily
-
-local BoughtsVoice = Sounds:FindFirstChild("Boughts")
-local Left_Nothing_Bought = Sounds:FindFirstChild("Left_Nothing_Bought")
-
 local ShopKeeperHandler = {}
 local MultiAttributes = {}
 
-local function getRandomSound(folder)
-	local randomIndex = RNG:NextInteger(1, #folder:GetChildren())
-	return folder:GetChildren()[randomIndex].Name
+local function countFrames(Holder)
+	local num = 0
+
+	for _, frame in Holder:GetChildren() do
+		if not frame:IsA("Frame") then continue end
+		num += 1
+	end
+
+	return num
 end
 
 local function generateStat(value, name)
@@ -52,6 +53,7 @@ local function generateStat(value, name)
 
 	for _, currentLevel in stat.Main.UpgradeIndiciator:GetChildren() do
 		if not currentLevel:IsA("Frame") then continue end
+
 		Hydrate(currentLevel) {
 			BackgroundColor3 = Spring(Computed(function()
 				return value:get() >= tonumber(currentLevel.Name)
@@ -61,7 +63,28 @@ local function generateStat(value, name)
 		}
 	end
 
-	
+	local price = Computed(function()
+		return progressCaculation(value:get(), {
+			base = 400,
+			quadcoef = 200,
+			linearcoef = 400,
+		})
+	end)
+
+	local Max = countFrames(stat.Main.UpgradeIndiciator)
+	stat.Main.Upgrade:SetAttribute("Price", price:get())
+
+	Hydrate(stat.Main.Upgrade.PriceText) {
+		Text = Computed(function()
+			return value:get() < Max and `${tostring(price:get())}` or "MAXED!"
+		end),
+	}
+
+	stat.Main.Upgrade.MouseButton1Click:Connect(function()
+		-- if ReplicatedStorage:GetAttribute("Money") < price:get() then return end
+		if workspace:GetAttribute(name) >= Max then return end
+		Net:RemoteEvent("UpdateMoney"):FireServer(price:get(), name)
+	end)
 
 	stat.Main.MouseEnter:Connect(function()
 		mouseEntered:set(true)
