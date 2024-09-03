@@ -1,0 +1,1 @@
+[{"title":"Schedule","type":0,"sectionRef":"#","url":"/api/Schedule","content":"","keywords":""},{"title":"Functions​","type":1,"pageTitle":"Schedule","url":"/api/Schedule#functions","content":" "},{"title":"new​","type":1,"pageTitle":"Schedule","url":"/api/Schedule#new","content":"&lt;/&gt; Schedule:new(time:: number?) → () This creates a new class for the Schedule "}]
